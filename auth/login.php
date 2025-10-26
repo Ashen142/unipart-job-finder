@@ -9,7 +9,7 @@ include '../includes/header.php';
 <div class="login-container">
     <div class="card">
         <h1 class="heading-main">Log In To Your Account</h1>
-        <p class="tagline">Connecting students with part-time jobs and **internships**.</p>
+        <p class="tagline">Connecting students with part-time jobs </p>
         
         <form action="login.php" method="POST" class="login-form">
             <div class="input-group">
