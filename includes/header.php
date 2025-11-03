@@ -11,6 +11,11 @@ echo '<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     if (isset($extraCSS)) {
+        foreach ($extraCSS as $cssFile) {
+            echo '<link rel="stylesheet" href="' . $cssFile . '">';
+        }
+    }
 </head>
 <body>
     <header class="navbar">
