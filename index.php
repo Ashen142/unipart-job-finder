@@ -3,7 +3,7 @@
 include '../includes/db_connect.php'; 
 include '../includes/functions.php';  
 $page_title = "Home - UniPart ";
-$extraCSS = ["../assets/css/index.css"]; 
+$extraCSS = "../assets/css/index.css"; 
 include '../includes/header.php'; 
 ?>   
     <section class="hero">
