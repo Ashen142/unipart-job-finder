@@ -32,12 +32,12 @@ $page_title = $page_title ?? "UniPart - Part-Time Job Finder";
             UniPart <i class="fa fa-briefcase"></i>
         </div>
         <nav>
-            <a href="/Unipart-job-finder/unipart-job-finder/index.php">Home</a>
+            <a href="/Unipart-job-finder/index.php">Home</a>
             <a href="/unipart-job-finder/jobs/view-jobs.php">Jobs</a>
             <a href="/unipart-job-finder/dashboard/student-dashboard.php">Dashboard</a>
             <a href="/unipart-job-finder/profiles/student-profile.php">Profile</a>
         </nav>
-        <a href="/Unipart-job-finder/unipart-job-finder/auth/login.php" class="nav-button">Login / Register</a>
+        <a href="/Unipart-job-finder/auth/login.php" class="nav-button">Login / Register</a>
 
     </header>
 
