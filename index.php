@@ -3,9 +3,10 @@
 include '../includes/db_connect.php'; 
 include '../includes/functions.php';  
 $page_title = "Home - UniPart ";
-$extraCSS = "../assets/css/index.css"; 
+// $extraCSS = "../assets/css/index.css"; 
 include '../includes/header.php'; 
-?>   
+?>  
+<link rel="stylesheet" href="assets/css/index.css"> 
     <section class="hero">
         <h1>Find Your Next Opportunity</h1>
         <p>Connecting students with part-time jobs and internships</p>
