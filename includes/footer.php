@@ -1,9 +1,7 @@
-<?php
-// includes/footer.php
-echo '</main>
+    </main>
+
     <footer class="footer">
-        © 2025 UniPart. All rights reserved. 
+        <p>&copy; <?= date("Y") ?> UniPart - Connecting Students and Employers</p>
     </footer>
 </body>
-</html>';
-?>
+</html>

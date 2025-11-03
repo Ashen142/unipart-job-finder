@@ -1,30 +1,38 @@
 <?php
+// Include backend setup
+include __DIR__ . '/../includes/db_connect.php';
+include __DIR__ . '/../includes/functions.php';
 
-include '../includes/db_connect.php'; 
-include '../includes/functions.php';  
+// Page settings
 $page_title = "Log In to UniPart";
-include '../includes/header.php'; 
+$extraCSS = ["../assets/css/auth.css"]; // Optional: custom login/register styles
+
+// Include header
+include __DIR__ . '/../includes/header.php';
 ?>
 
+<!-- Login Page Content -->
 <div class="login-container">
     <div class="card">
         <h1 class="heading-main">Log In To Your Account</h1>
-        <p class="tagline">Connecting students with part-time jobs </p>
-        
+        <p class="tagline">Connecting students with part-time jobs</p>
+
         <form action="login.php" method="POST" class="login-form">
             <div class="input-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
-            
+
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            
+
             <div class="form-options">
-                <input type="checkbox" id="remember" name="remember">
-                <label for="remember">Remember Me</label>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember Me</label>
+                </div>
                 <a href="forgot-password.php" class="forgot-link">Forgot Password?</a>
             </div>
 
@@ -34,11 +42,11 @@ include '../includes/header.php';
         </form>
 
         <div class="register-link-section">
-            <p>Don't have an account? <a href="register.php" class="register-now">Register Now</a></p>
+            <p>Don't have an account?
+                <a href="register.php" class="register-now">Register Now</a>
+            </p>
         </div>
     </div>
 </div>
 
-<?php
-include '../includes/footer.php'; 
-?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

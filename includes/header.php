@@ -1,32 +1,44 @@
 <?php
- 
-$home = "../index.php"; 
-
-echo '<!DOCTYPE html>
+$page_title = $page_title ?? "UniPart - Part-Time Job Finder";
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>' . ($page_title ?? "UniPart - Part-Time Job Finder") . '</title>
+    <title><?= htmlspecialchars($page_title) ?></title>
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="<?= dirname($_SERVER['SCRIPT_NAME']) ?>/assets/css/style.css">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-     if (isset($extraCSS)) {
+
+    <!-- Page-specific CSS -->
+    <?php
+    if (isset($extraCSS) && is_array($extraCSS)) {
         foreach ($extraCSS as $cssFile) {
-            echo '<link rel="stylesheet" href="' . $cssFile . '">';
+            echo '<link rel="stylesheet" href="' . htmlspecialchars($cssFile) . '">' . PHP_EOL;
         }
     }
+    ?>
 </head>
 <body>
     <header class="navbar">
-        <div class="logo">UniPart <i class="fa fa-briefcase"></i></div>
+        <div class="logo">
+            UniPart <i class="fa fa-briefcase"></i>
+        </div>
         <nav>
-            <a href="' . $home . '">Home</a>
-            <a href="../jobs/view-jobs.php">Jobs</a>
-            <a href="../dashboard/student-dashboard.php">Dashboard</a>
-            <a href="../profiles/student-profile.php">Profile</a>
-            </nav>
-        <a href="register.php" class="nav-button">Login / Register</a>
+            <a href="/Unipart-job-finder/unipart-job-finder/index.php">Home</a>
+            <a href="/unipart-job-finder/jobs/view-jobs.php">Jobs</a>
+            <a href="/unipart-job-finder/dashboard/student-dashboard.php">Dashboard</a>
+            <a href="/unipart-job-finder/profiles/student-profile.php">Profile</a>
+        </nav>
+        <a href="/Unipart-job-finder/unipart-job-finder/auth/login.php" class="nav-button">Login / Register</a>
+
     </header>
-    <main class="page-background">'; 
-?>
+
+    <main class="page-background">
