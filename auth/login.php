@@ -29,10 +29,7 @@ include __DIR__ . '/../includes/header.php';
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Password" required>
                 </div>
-
-                <div class="form-group">
-                    <input type="password" id="confirm-password" placeholder="confirm-password">
-                </div>
+                
 
                 <div class="remember-me">
                     <input type="checkbox" id="remember">
