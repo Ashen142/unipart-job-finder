@@ -5,13 +5,13 @@ include __DIR__ . '/../includes/functions.php';
 
 // Page settings
 $page_title = "Log In to UniPart";
-$extraCSS = ["../assets/css/auth.css"]; // Optional: custom login/register styles
+$extraCSS = ['/Unipart-job-finder/assets/css/auth.css'];
+$body_class = 'auth-page';
 
 // Include header
 include __DIR__ . '/../includes/header.php';
 ?>
 
-<!-- Login Page Content -->
 <div class="login-container">
     <div class="card">
         <h1 class="heading-main">Log In To Your Account</h1>

@@ -1,27 +1,18 @@
 <?php
-// Include backend setup
 include __DIR__ . '/../includes/db_connect.php';
 include __DIR__ . '/../includes/functions.php';
 
 // Page settings
 $page_title = "Register In to UniPart";
-$extraCSS = ["../assets/css/auth.css"]; // Optional: custom login/register styles
+$extraCSS = ['/Unipart-job-finder/assets/css/auth.css']; // Page-specific CSS
+// Body class to allow page-specific header/footer styling
+$body_class = 'auth-page';
+// Page-specific JS (will be printed by footer.php)
+$extraJS = ['/Unipart-job-finder/assets/js/register.js'];
 
 // Include header
 include __DIR__ . '/../includes/header.php';
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - UniPart</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/auth.css"> 
-</head>
-<body>
-    
 
     <div class="auth-container">
         <div class="register-card">
@@ -29,7 +20,7 @@ include __DIR__ . '/../includes/header.php';
 
             <form action="register.php" method="POST" class="auth-form">
 
-                <div class="form-group role-selection">
+                <div class="form-group role-selection full">
                     <label>Register as:</label>
                     <div class="radio-group">
                         <input type="radio" id="role-student" name="user_role" value="Student" required checked>
@@ -60,56 +51,23 @@ include __DIR__ . '/../includes/header.php';
                     <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
                 </div>
 
-                <div class="form-group student-field">
+                <div class="form-group student-field full">
                     <label for="university_id">University ID/Roll No.:</label>
                     <input type="text" id="university_id" name="university_id" placeholder="Your University ID" required>
                 </div>
 
-                <div class="form-group employer-field" style="display:none;">
+                <div class="form-group employer-field full" style="display:none;">
                     <label for="company_name">Company Name:</label>
                     <input type="text" id="company_name" name="company_name" placeholder="Your Company Name" required disabled>
                 </div>
 
-                <button type="submit" name="register_btn" class="submit-btn">Register</button>
+                <div class="form-group full">
+                    <button type="submit" name="register_btn" class="submit-btn">Register</button>
+                </div>
             </form>
 
             <p class="login-link">Already have an account? <a href="login.php">Login here</a></p>
         </div>
     </div>
 
-    <?php include('../includes/footer.php'); // Adjust path as needed ?>
-    
-    <script>
-        const studentRole = document.getElementById('role-student');
-        const employerRole = document.getElementById('role-employer');
-        const studentField = document.querySelector('.student-field');
-        const employerField = document.querySelector('.employer-field');
-        const companyNameInput = document.getElementById('company_name');
-        const universityIdInput = document.getElementById('university_id');
-
-        function toggleFields() {
-            if (studentRole.checked) {
-                studentField.style.display = 'block';
-                universityIdInput.required = true;
-                employerField.style.display = 'none';
-                companyNameInput.required = false;
-                companyNameInput.disabled = true; // Disable if hidden
-                universityIdInput.disabled = false; // Enable if shown
-            } else if (employerRole.checked) {
-                studentField.style.display = 'none';
-                universityIdInput.required = false;
-                universityIdInput.disabled = true; // Disable if hidden
-                employerField.style.display = 'block';
-                companyNameInput.required = true;
-                companyNameInput.disabled = false; // Enable if shown
-            }
-        }
-
-        studentRole.addEventListener('change', toggleFields);
-        employerRole.addEventListener('change', toggleFields);
-
-        // Initial check on load
-        toggleFields();
-    </script>
-</body>
-</html>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
