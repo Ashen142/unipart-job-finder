@@ -7,6 +7,7 @@ include __DIR__ . '/../includes/functions.php';
 $page_title = "Log In to UniPart";
 $extraCSS = ['/Unipart-job-finder/assets/css/auth.css'];
 $body_class = 'auth-page';
+$page_type = 'auth';
 
 // Include header
 include __DIR__ . '/../includes/header.php';

@@ -7,6 +7,7 @@ include __DIR__ . '/../includes/functions.php';
 $page_title = "employee-dashboard to UniPart";
 $extraCSS = ['/Unipart-job-finder/assets/css/dashboard.css'];
 $body_class = 'dashboard-page';
+$page_type = 'employee';
 
 // Include header
 include __DIR__ . '/../includes/header.php';

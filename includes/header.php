@@ -60,13 +60,38 @@ $rootFolder = '/Unipart-job-finder';
                 UniPart <i class="fa fa-briefcase"></i>
             </a>
         </div>
-        <nav>
-            <a href="<?= $rootFolder ?>/index.php">Home</a>
-            <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
-            <a href="<?= $rootFolder ?>/dashboard/student-dashboard.php">Dashboard</a>
-            <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
-        </nav>
-        <a href="<?= $rootFolder ?>/auth/login.php" class="nav-button">Login / Register</a>
+        <?php if (isset($page_type) && $page_type === 'auth'): ?>
+        <!-- Navbar for login/Register pages -->
+            <nav>
+                <a href="<?= $rootFolder ?>/index.php">Home</a>
+                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
+                <a href="<?= $rootFolder ?>/dashboard/employer-dashboard.php">Dashboard</a>
+                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
+            </nav>
+            <a href="<?= $rootFolder ?>/auth/register.php" class="nav-button">Register</a>
+        
+        <?php elseif (isset($page_type) && $page_type === 'employee'): ?>
+
+        <!-- Navbar for employee dashboard -->
+            <nav>
+                <a href="<?= $rootFolder ?>/index.php">Home</a>
+                <a href="<?= $rootFolder ?>/dashboard/employer-dashboard.php">Dashboard</a>
+                <a href="<?= $rootFolder ?>/jobs/add-jobs.php">Post a Jobs</a>
+                <a href="<?= $rootFolder ?>/jobs/edit-job.php">Manage Jobs</a>
+                <a href="<?= $rootFolder ?>/admin/reports.php">Reports</a>
+            </nav>
+            <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
+        
+        <?php else: ?>
+        <!-- Default Navbar -->
+            <nav>
+                <a href="<?= $rootFolder ?>/index.php">Home</a>
+                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
+                <a href="<?= $rootFolder ?>/dashboard/employer-dashboard.php">Dashboard</a>
+                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
+            </nav>
+            <a href="<?= $rootFolder ?>/auth/login.php" class="nav-button">Login</a>
+        <?php endif; ?>
     </header>
 
     <main class="page-background">
