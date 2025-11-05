@@ -74,6 +74,7 @@ $rootFolder = '/Unipart-job-finder';
 
         <!-- Navbar for employee dashboard -->
             <nav>
+                <a href="<?= $rootFolder ?>/home.php">Home</a>
                 <a href="<?= $rootFolder ?>/profiles/employer-profile.php">Profile</a>
                 <a href="<?= $rootFolder ?>/dashboard/employer-dashboard.php">Dashboard</a>
                 <a href="<?= $rootFolder ?>/jobs/add-jobs.php">Post a Jobs</a>
@@ -86,10 +87,22 @@ $rootFolder = '/Unipart-job-finder';
 
         <!-- Navbar for student dashboard -->
             <nav>
+                <a href="<?= $rootFolder ?>/home.php">Home</a>
                 <a href="<?= $rootFolder ?>/dashboard/student-dashboard.php">Dashboard</a>
                 <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
                 <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
                 <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Search Job</a>
+            </nav>
+            <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
+        
+        <?php elseif (isset($page_type) && $page_type === 'home'): ?>
+
+        <!-- Navbar for home page -->
+            <nav>
+                <a href="<?= $rootFolder ?>/home.php">Home</a>
+                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
+                <a href="<?= $rootFolder ?>/dashboard/student-dashboard.php">Dashboard</a>
+                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
             </nav>
             <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
         
