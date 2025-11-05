@@ -135,6 +135,7 @@ body {
         .section-title {
             font-size: 1.5rem;
             color: #2c3e50;
+            font-weight: 600;
         }
 
         .job-card {
@@ -181,6 +182,32 @@ body {
             justify-content: space-between;
             align-items: center;
             margin-top: 1rem;
+        }
+
+         .job-company {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-info {
+            display: flex;
+            gap: 2rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .view-paid {
+            color: #16a085;
+            text-decoration: none;
+            font-weight: 600;
         }
 
         .applicants {
@@ -266,6 +293,57 @@ body {
             transition: background 0.3s;
         }
 
+        .tracker-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tracker-icon {
+            width: 50px;
+            height: 50px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .tracker-content {
+            flex: 1;
+        }
+
+        .tracker-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .tracker-subtitle {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .status-icon {
+            color: #16a085;
+            font-size: 1.5rem;
+        }
+
+        .notification-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            color: #555;
+            line-height: 1.6;
+        }
+
         .quick-link-btn:hover {
             background: #3498db;
         }
@@ -292,5 +370,8 @@ body {
             .job-icon {
                 width: 60px;
                 height: 60px;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
             }
         }
