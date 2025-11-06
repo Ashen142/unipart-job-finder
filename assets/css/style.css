@@ -70,7 +70,7 @@ h1, h2, h3 {
 /* Main Layout & Footer */
 .page-background {
     min-height: 85vh; /* Ensure footer stays low */
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     padding: 50px 0;
 }

@@ -13,194 +13,211 @@ $page_type = 'student';
 include __DIR__ . '/../includes/header.php';
 ?>
 
+
 <!-- Main Container -->
-    <div class="main-container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1>My Profile</h1>
-        </div>
+    <div class="container">
 
-
-        <!-- Profile Layout -->
-        <div class="profile-layout">
-            <!-- Sidebar -->
-            <div class="profile-sidebar">
-                <div class="profile-avatar">
-                    <div class="avatar-circle">WS</div>
-                    <h3 class="profile-name">Wimansa Samudinee</h3>
-                    <p class="profile-role">Software Engineering Student</p>
-                    <button class="upload-btn">
-                        <i class="fas fa-camera"></i> Change Photo
-                    </button>
-                </div>
-
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Total Applications</span>
-                        <span class="stat-value">12</span>
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-circle">WS</div>
+            <!-- <img src="../assets/images/student-avatar.jpg" alt="Student Avatar" class="profile-avatar"> -->
+            <div class="profile-info">
+                <h1>Wimansa Samudinee</h1>
+                <p class="profile-subtitle">software Engineering Student | Full Stack Developer</p>
+                <span class="status-badge">
+                    <i class="fas fa-circle"></i>
+                    Available for Work
+                </span>
+                <div class="profile-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>University of Jayewardenapura</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Jobs Completed</span>
-                        <span class="stat-value">5</span>
+                    <div class="meta-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>wimansa@student.cmb.ac.lk</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Pending Applications</span>
-                        <span class="stat-value">3</span>
+                    <div class="meta-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+94 71 234 5678</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Member Since</span>
-                        <span class="stat-value">Jan 2024</span>
+                    <div class="meta-item rating">
+                        <i class="fas fa-star"></i>
+                        <span><strong>4.9</strong> (18 reviews)</span>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Profile Content -->
-            <div class="profile-content">
-                <!-- Personal Information -->
-                <div class="profile-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Personal Information</h2>
-                        <button class="edit-btn">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                    </div>
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-paper-plane"></i>
+                <h3>12</h3>
+                <p>Applications Sent</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>5</h3>
+                <p>Jobs Completed</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3>3</h3>
+                <p>Pending Applications</p>
+            </div>
+        </div>
 
-                    <form>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Full Name</label>
-                                <input type="text" class="form-input" value="Wimansa Samudinee" placeholder="Enter your full name">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Email Address</label>
-                                <input type="email" class="form-input" value="wimansasamudinee@gmail.com" placeholder="Enter your email">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Phone Number</label>
-                                <input type="tel" class="form-input" value="+94 77 123 4567" placeholder="Enter phone number">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Student ID</label>
-                                <input type="text" class="form-input" value="FC115501" placeholder="Enter student ID">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Department</label>
-                                <select class="form-select">
-                                    <option>Software Engineering</option>
-                                    <option>Computer Science</option>
-                                    <option>Business Administration</option>
-                                    <option>Arts & Humanities</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Year of Study</label>
-                                <select class="form-select">
-                                    <option>1st Year</option>
-                                    <option selected>2nd Year</option>
-                                    <option>3rd Year</option>
-                                    <option>4th Year</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Address</label>
-                            <input type="text" class="form-input" value="123 Main Street, Mirigama" placeholder="Enter your address">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">About Me</label>
-                            <textarea class="form-textarea" placeholder="Tell employers about yourself...">Motivated Software Engineering student with a passion for web development and problem-solving. Looking for part-time opportunities to gain practical experience while completing my degree.</textarea>
-                        </div>
-                    </form>
+        <!-- Personal Information -->
+        <div class="profile-section">
+            <h2 class="section-title">Personal Information</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Full Name</span>
+                    <span class="detail-value">Wimansa Samudinee</span>
                 </div>
-
-                <!-- Skills Section -->
-                <div class="profile-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Skills & Expertise</h2>
-                        <button class="edit-btn">
-                            <i class="fas fa-plus"></i> Add Skill
-                        </button>
-                    </div>
-
-                    <div class="skills-container">
-                        <div class="skill-tag">
-                            PHP <i class="fas fa-times"></i>
-                        </div>
-                        <div class="skill-tag">
-                            JavaScript <i class="fas fa-times"></i>
-                        </div>
-                        <div class="skill-tag">
-                            MySQL <i class="fas fa-times"></i>
-                        </div>
-                        <div class="skill-tag">
-                            HTML/CSS <i class="fas fa-times"></i>
-                        </div>
-                        <div class="skill-tag">
-                            React <i class="fas fa-times"></i>
-                        </div>
-                        <div class="skill-tag">
-                            Python <i class="fas fa-times"></i>
-                        </div>
-                        <div class="skill-tag">
-                            Git <i class="fas fa-times"></i>
-                        </div>
-                    </div>
-
-                    <div class="form-group" style="margin-top: 20px;">
-                        <label class="form-label">Add New Skill</label>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" class="form-input" placeholder="Enter skill name">
-                            <button class="add-skill-btn">
-                                <i class="fas fa-plus"></i> Add
-                            </button>
-                        </div>
-                    </div>
+                <div class="detail-item">
+                    <span class="detail-label">Student ID</span>
+                    <span class="detail-value">SE/2022/045</span>
                 </div>
-
-                <!-- Resume Section -->
-                <div class="profile-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Resume / CV</h2>
-                        <button class="edit-btn">
-                            <i class="fas fa-upload"></i> Upload New
-                        </button>
-                    </div>
-
-                    <div class="resume-item">
-                        <div class="resume-info">
-                            <i class="fas fa-file-pdf resume-icon"></i>
-                            <div class="resume-details">
-                                <h4>Wimansa_Samudinee_Resume_2024.pdf</h4>
-                                <p>Uploaded on March 15, 2024 • 245 KB</p>
-                            </div>
-                        </div>
-                        <div class="resume-actions">
-                            <button class="btn-small btn-view">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn-small btn-delete">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </div>
+                <div class="detail-item">
+                    <span class="detail-label">Department</span>
+                    <span class="detail-value">Software Engineer</span>
                 </div>
+                <div class="detail-item">
+                    <span class="detail-label">Year of Study</span>
+                    <span class="detail-value">2nd Year</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Email Address</span>
+                    <span class="detail-value">wimansa@student.cmb.ac.lk</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Phone Number</span>
+                    <span class="detail-value">+94 71 234 5678</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Location</span>
+                    <span class="detail-value">Colombo, Sri Lanka</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Member Since</span>
+                    <span class="detail-value">March 2024</span>
+                </div>
+            </div>
+        </div>
 
-                <!-- Save Changes -->
-                <div class="save-section">
-                    <button class="save-btn">
-                        <i class="fas fa-save"></i> Save Changes
+        <!-- About Me -->
+        <div class="profile-section">
+            <h2 class="section-title">About Me</h2>
+            <p class="about-text">
+                I am a dedicated Software Engineering student with a passion for web development and software engineering. I have experience working with modern web technologies including React, Node.js, and PHP. I'm eager to apply my skills in real-world projects and gain practical experience while pursuing my degree.
+            </p>
+            <p class="about-text" style="margin-top: 15px;">
+                I'm looking for part-time opportunities that allow me to contribute to meaningful projects while balancing my academic commitments. I'm a fast learner, detail-oriented, and enjoy working in collaborative team environments.
+            </p>
+        </div>
+
+        <!-- Skills -->
+        <div class="profile-section">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-container">
+                <span class="skill-tag">HTML & CSS</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Git & GitHub</span>
+                <span class="skill-tag">Responsive Design</span>
+                <span class="skill-tag">REST APIs</span>
+            </div>
+        </div>
+
+        <!-- Education -->
+        <div class="profile-section">
+            <h2 class="section-title">Education</h2>
+            <div class="detail-item" style="margin-bottom: 15px;">
+                <span class="detail-label">Bachelor of Science in Software Engineer</span>
+                <span class="detail-value">University of Jayewardenapura</span>
+                <span style="color: #6C757D; font-size: 14px; margin-top: 5px;">2025 - Present | CGPA: 3.0/4.0</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">G.C.E Advanced Level</span>
+                <span class="detail-value">Bandaranayaka College, Veyangoda</span>
+                <span style="color: #6C757D; font-size: 14px; margin-top: 5px;">2022 | Physical Science Stream - 3B's</span>
+            </div>
+        </div>
+
+        <!-- Resume -->
+        <div class="profile-section">
+            <h2 class="section-title">Resume / CV</h2>
+            <div class="resume-box">
+                <i class="fas fa-file-pdf"></i>
+                <p class="resume-info">
+                    <strong>Wimansa_Samudinee_Resume.pdf</strong><br>
+                    Uploaded on: March 15, 2024 | Size: 245 KB
+                </p>
+                <div class="btn-container" style="justify-content: center;">
+                    <a href="../uploads/resumes/kamal_resume.pdf" class="btn-success" download>
+                        <i class="fas fa-download"></i>
+                        Download Resume
+                    </a>
+                    <button class="btn-primary">
+                        <i class="fas fa-upload"></i>
+                        Upload New Resume
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Work Preferences -->
+        <div class="profile-section">
+            <h2 class="section-title">Work Preferences</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Job Type Preference</span>
+                    <span class="detail-value">Part-time, Remote, Freelance</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Availability</span>
+                    <span class="detail-value">15-20 hours per week</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Expected Hourly Rate</span>
+                    <span class="detail-value">LKR 800 - 1200 per hour</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Preferred Work Location</span>
+                    <span class="detail-value">Colombo or Remote</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="profile-section">
+            <h2 class="section-title">Account Actions</h2>
+            <div class="btn-container">
+                <a href="edit-profile.php" class="btn-primary">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </a>
+                <a href="../jobs/view-jobs.php" class="btn-primary">
+                    <i class="fas fa-search"></i>
+                    Browse Jobs
+                </a>
+                <a href="../applications/student-applications.php" class="btn-primary">
+                    <i class="fas fa-file-alt"></i>
+                    My Applications
+                </a>
+                <button class="btn-secondary">
+                    <i class="fas fa-key"></i>
+                    Change Password
+                </button>
             </div>
         </div>
     </div>
+
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
