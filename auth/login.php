@@ -13,13 +13,14 @@ $page_type = 'auth';
 include __DIR__ . '/../includes/header.php';
 ?>
 
- <main class="main-content">
-        <div class="header-text">
-            <h1>Log In to Your Account</h1>
-            <p>Connecting students with part-time jobs and internships</p>
-        </div>
-
+<main class="main-content">
+    <div class="login-container"> 
         <div class="login-card">
+            <div class="header-text">
+                <h1>Log In to Your Account</h1>
+                <p>Connecting students with part-time jobs and internships</p>
+            </div>
+
             <form action="login.php" method="POST" class="login-form">
                 <div class="form-group">
                     <label for="email">Email Address</label>
@@ -30,7 +31,6 @@ include __DIR__ . '/../includes/header.php';
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Password" required>
                 </div>
-                
 
                 <div class="remember-me">
                     <input type="checkbox" id="remember">
@@ -40,10 +40,11 @@ include __DIR__ . '/../includes/header.php';
                 <button type="submit" class="login-btn">Login</button>
 
                 <div class="register-link">
-                    Don't have you account? <a href="register.php">Register Now</a>
+                    Don't have an account? <a href="register.php">Register Now</a>
                 </div>
             </form>
         </div>
-    </main>
+    </div> 
+</main>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
