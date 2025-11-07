@@ -647,3 +647,256 @@
 
 
         }
+
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.edit-profile-page {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F8F9FA;
+    color: #212529;
+    line-height: 1.6;
+}
+
+/* Main Container */
+.container {
+    max-width: 900px;
+    margin: 30px auto 40px;
+    padding: 0 20px;
+}
+
+/* Profile Card */
+.profile-card {
+    background: #FFFFFF;
+    border: 1px solid #CED4DA;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.profile-header {
+    padding: 30px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.profile-header.student {
+    background: linear-gradient(135deg, #28A745 0%, #20873a 100%);
+}
+
+.profile-header.employer {
+    background: linear-gradient(135deg, #FD7E14 0%, #e56b0a 100%);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    border: 4px solid #FFFFFF;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.profile-avatar.student {
+    color: #28A745;
+}
+
+.profile-avatar.employer {
+    color: #FD7E14;
+}
+
+.profile-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.profile-role {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Form Container */
+.form-container {
+    padding: 30px;
+}
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #007BFF;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #212529;
+    font-size: 14px;
+}
+
+label .required {
+    color: #DC3545;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="url"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #CED4DA;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    transition: all 0.3s;
+    background: #FFFFFF;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.file-info {
+    font-size: 14px;
+    color: #6C757D;
+    margin-top: 5px;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary,
+.save-btn {
+    background-color: #007BFF;
+    color: #FFFFFF;
+}
+
+.btn-primary:hover,
+.save-btn:hover {
+    background-color: #0069D9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-secondary {
+    background-color: #6C757D;
+    color: #FFFFFF;
+}
+
+.btn-secondary:hover {
+    background-color: #5A6268;
+}
+
+/* Current File Display */
+.current-file {
+    background: #F8F9FA;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.current-file a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.current-file a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .profile-header h1 {
+        font-size: 24px;
+    }
+
+    .container {
+        margin: 20px auto;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+}

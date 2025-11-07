@@ -135,80 +135,193 @@ include __DIR__ . '/../includes/header.php';
 <div class="container">
 <?php if ($role === 'student'): ?>
     <!-- STUDENT EDIT FORM -->
-    <h1>Edit Student Profile</h1>
-    <form action="" method="POST" enctype="multipart/form-data">
-        <label>Full Name *</label>
-        <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+    <div class="profile-card">
+        <!-- Student Header -->
+        <div class="profile-header student">
+            <div class="profile-avatar student">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>Edit Student Profile</h1>
+            <p class="profile-role">Update your academic and personal information</p>
+        </div>
 
-        <label>Email *</label>
-        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+        <!-- Student Form -->
+        <div class="form-container">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-user-edit"></i> Personal Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" placeholder="+94771234567">
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" name="location" value="<?php echo htmlspecialchars($user['location']); ?>" placeholder="City, Province">
+                        </div>
+                    </div>
+                </div>
 
-        <label>Phone</label>
-        <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+                <!-- Academic Information -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Academic Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Department/Major <span class="required">*</span></label>
+                            <input type="text" name="department" value="<?php echo htmlspecialchars($user['department']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Year of Study <span class="required">*</span></label>
+                            <input type="text" name="year" value="<?php echo htmlspecialchars($user['year']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Student ID</label>
+                            <input type="text" name="student_id" value="<?php echo htmlspecialchars($user['student_id']); ?>" placeholder="Your student ID">
+                        </div>
+                        <div class="form-group">
+                            <label>GPA/CGPA</label>
+                            <input type="text" name="gpa" value="<?php echo htmlspecialchars($user['gpa']); ?>" placeholder="e.g., 3.75">
+                        </div>
+                    </div>
+                </div>
 
-        <label>Location</label>
-        <input type="text" name="location" value="<?php echo htmlspecialchars($user['location']); ?>">
+                <!-- Skills & Bio -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-tools"></i> Skills & About Me</h2>
+                    <div class="form-group">
+                        <label>Skills (comma separated)</label>
+                        <textarea name="skills" placeholder="e.g., Python, JavaScript, Web Development, Data Analysis"><?php echo htmlspecialchars($user['skills']); ?></textarea>
+                        <p class="file-info">List your technical and soft skills</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Bio / Personal Statement</label>
+                        <textarea name="bio" placeholder="Tell employers about yourself, your goals, and what you're looking for..."><?php echo htmlspecialchars($user['bio']); ?></textarea>
+                    </div>
+                </div>
 
-        <label>Department *</label>
-        <input type="text" name="department" value="<?php echo htmlspecialchars($user['department']); ?>" required>
+                <!-- Resume Upload -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-file-pdf"></i> Resume/CV</h2>
+                    <div class="form-group">
+                        <label>Upload Resume (PDF only)</label>
+                        <input type="file" name="resume" accept=".pdf">
+                        <p class="file-info">Maximum file size: 5MB | Supported format: PDF</p>
+                        <?php if(!empty($user['resume'])): ?>
+                            <div class="current-file">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>Current: <a href="../uploads/resumes/<?php echo htmlspecialchars($user['resume']); ?>" target="_blank"><?php echo htmlspecialchars($user['resume']); ?></a></span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
 
-        <label>Year *</label>
-        <input type="text" name="year" value="<?php echo htmlspecialchars($user['year']); ?>" required>
-
-        <label>Student ID</label>
-        <input type="text" name="student_id" value="<?php echo htmlspecialchars($user['student_id']); ?>">
-
-        <label>GPA</label>
-        <input type="text" name="gpa" value="<?php echo htmlspecialchars($user['gpa']); ?>">
-
-        <label>Skills (comma separated)</label>
-        <textarea name="skills"><?php echo htmlspecialchars($user['skills']); ?></textarea>
-
-        <label>Bio</label>
-        <textarea name="bio"><?php echo htmlspecialchars($user['bio']); ?></textarea>
-
-        <label>Resume (PDF)</label>
-        <input type="file" name="resume">
-        <?php if(!empty($user['resume'])): ?>
-            <p>Current: <a href="../uploads/resumes/<?php echo htmlspecialchars($user['resume']); ?>" target="_blank"><?php echo htmlspecialchars($user['resume']); ?></a></p>
-        <?php endif; ?>
-
-        <button type="submit" class="save-btn">Save Changes</button>
-    </form>
+                <!-- Buttons -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a href="student-profile.php" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
 <?php else: ?>
     <!-- EMPLOYER EDIT FORM -->
-    <h1>Edit Employer Profile</h1>
-    <form action="" method="POST" enctype="multipart/form-data">
-        <label>Contact Person Name *</label>
-        <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+    <div class="profile-card">
+        <!-- Employer Header -->
+        <div class="profile-header employer">
+            <div class="profile-avatar employer">
+                <i class="fas fa-building"></i>
+            </div>
+            <h1>Edit Employer Profile</h1>
+            <p class="profile-role">Update your company information and details</p>
+        </div>
 
-        <label>Email *</label>
-        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+        <!-- Employer Form -->
+        <div class="form-container">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <!-- Contact Person Information -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-user-tie"></i> Contact Person Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Contact Person Name <span class="required">*</span></label>
+                            <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number <span class="required">*</span></label>
+                            <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" placeholder="+94112345678" required>
+                        </div>
+                    </div>
+                </div>
 
-        <label>Phone *</label>
-        <input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
+                <!-- Company Information -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-building"></i> Company Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Company Name <span class="required">*</span></label>
+                            <input type="text" name="company_name" value="<?php echo htmlspecialchars($user['company_name']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Industry</label>
+                            <input type="text" name="industry" value="<?php echo htmlspecialchars($user['industry']); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Size</label>
+                            <input type="text" name="company_size" value="<?php echo htmlspecialchars($user['size']); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" name="company_website" value="<?php echo htmlspecialchars($user['website']); ?>" placeholder="https://www.yourcompany.com">
+                        </div>
+                    </div>
+                </div>
 
-        <label>Company Name *</label>
-        <input type="text" name="company_name" value="<?php echo htmlspecialchars($user['company_name']); ?>" required>
+                <!-- Company Logo -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-image"></i> Company Logo</h2>
+                    <div class="form-group">
+                        <label>Upload Company Logo</label>
+                        <input type="file" name="logo" accept="image/jpeg,image/png,image/jpg">
+                        <p class="file-info">Maximum file size: 2MB | Supported formats: JPG, PNG</p>
+                        <?php if(!empty($user['logo'])): ?>
+                            <div class="current-file">
+                                <i class="fas fa-image"></i>
+                                <span>Current: <a href="../uploads/logos/<?php echo htmlspecialchars($user['logo']); ?>" target="_blank"><?php echo htmlspecialchars($user['logo']); ?></a></span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
 
-        <label>Industry</label>
-        <input type="text" name="industry" value="<?php echo htmlspecialchars($user['industry']); ?>">
-
-        <label>Company Size</label>
-        <input type="text" name="company_size" value="<?php echo htmlspecialchars($user['size']); ?>">
-
-        <label>Website</label>
-        <input type="url" name="company_website" value="<?php echo htmlspecialchars($user['website']); ?>">
-
-        <label>Logo</label>
-        <input type="file" name="logo">
-        <?php if(!empty($user['logo'])): ?>
-            <p>Current: <a href="../uploads/logos/<?php echo htmlspecialchars($user['logo']); ?>" target="_blank"><?php echo htmlspecialchars($user['logo']); ?></a></p>
-        <?php endif; ?>
-
-        <button type="submit">Save Changes</button>
-    </form>
+                <!-- Buttons -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a href="employer-profile.php" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 <?php endif; ?>
 </div>
 
