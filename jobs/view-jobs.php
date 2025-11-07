@@ -145,7 +145,7 @@ include __DIR__ . '/../includes/header.php';
                     <div class="job-footer">
                         <div class="salary">$15-20/hr</div>
                         <div class="job-actions">
-                            <button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                            <a href="../applications/apply-job.php"><button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button></a>
                             <button class="btn-save"><i class="far fa-bookmark"></i></button>
                         </div>
                     </div>
@@ -178,7 +178,7 @@ include __DIR__ . '/../includes/header.php';
                     <div class="job-footer">
                         <div class="salary">$18-25/hr</div>
                         <div class="job-actions">
-                            <button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                             <a href="../applications/apply-job.php"><button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button></a>
                             <button class="btn-save"><i class="far fa-bookmark"></i></button>
                         </div>
                     </div>
@@ -211,7 +211,7 @@ include __DIR__ . '/../includes/header.php';
                     <div class="job-footer">
                         <div class="salary">$12-18/hr</div>
                         <div class="job-actions">
-                            <button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                             <a href="../applications/apply-job.php"><button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button></a>
                             <button class="btn-save"><i class="far fa-bookmark"></i></button>
                         </div>
                     </div>
@@ -244,7 +244,7 @@ include __DIR__ . '/../includes/header.php';
                     <div class="job-footer">
                         <div class="salary">$15-22/hr</div>
                         <div class="job-actions">
-                            <button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                             <a href="../applications/apply-job.php"><button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button></a>
                             <button class="btn-save"><i class="far fa-bookmark"></i></button>
                         </div>
                     </div>
@@ -277,7 +277,7 @@ include __DIR__ . '/../includes/header.php';
                     <div class="job-footer">
                         <div class="salary">$10-15/hr</div>
                         <div class="job-actions">
-                            <button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button>
+                            <a href="../applications/apply-job.php"><button class="btn-apply"><i class="fas fa-paper-plane"></i> Apply Now</button></a>
                             <button class="btn-save"><i class="far fa-bookmark"></i></button>
                         </div>
                     </div>
