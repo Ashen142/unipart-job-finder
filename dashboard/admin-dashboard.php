@@ -136,8 +136,8 @@ include __DIR__ . '/../includes/header.php';
 
                     <div class="quick-links">
                         <h2 class="section-title">Quick Links</h2>
-                        <button class="quick-link-btn">Manage Users</button>
-                        <button class="quick-link-btn">System Reports</button>
+                        <button class="quick-link-btn"><a href="../admin/reports.php">System Reports</a></button>
+                        <button class="quick-link-btn"><a href="../admin/manage-users.php">Manage Users</a></button>
                     </div>
                 </div>
             </div>

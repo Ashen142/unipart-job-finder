@@ -121,8 +121,8 @@ include __DIR__ . '/../includes/header.php';
 
                     <div class="quick-links">
                         <h2 class="section-title">Quick Links</h2>
-                        <button class="quick-link-btn">Post New Job</button>
-                        <button class="quick-link-btn">System Reports</button>
+                        <button class="quick-link-btn"><a href="../jobs/add-job.php">Post New Job</a></button>
+                        <button class="quick-link-btn"><a href="../jobs/edit-job.php">Edit Job</a></button>
                     </div>
                 </div>
             </div>

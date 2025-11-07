@@ -282,6 +282,11 @@ body {
             margin-top: 2rem;
         }
 
+        .quick-links a{
+            text-decoration: none;
+            color: white;
+        }
+
         .quick-link-btn {
             display: block;
             width: 100%;
