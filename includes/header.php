@@ -1,7 +1,9 @@
 <?php
-// ===============================
-// UniPart - Header Include File
-// ===============================
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Default page title
 $page_title = $page_title ?? "UniPart - Part-Time Job Finder";
@@ -11,6 +13,7 @@ $rootFolder = '/Unipart-job-finder';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,13 +24,12 @@ $rootFolder = '/Unipart-job-finder';
 
     <!-- Main Styles -->
     <?php
-        // Compute main stylesheet URL and append file modification time for cache-busting
-        $mainCss = $rootFolder . '/assets/css/style.css';
-        $mainCssFile = $_SERVER['DOCUMENT_ROOT'] . $mainCss;
-        $mainCssUrl = $mainCss;
-        if (file_exists($mainCssFile)) {
-            $mainCssUrl .= '?v=' . filemtime($mainCssFile);
-        }
+    $mainCss = $rootFolder . '/assets/css/style.css';
+    $mainCssFile = $_SERVER['DOCUMENT_ROOT'] . $mainCss;
+    $mainCssUrl = $mainCss;
+    if (file_exists($mainCssFile)) {
+        $mainCssUrl .= '?v=' . filemtime($mainCssFile);
+    }
     ?>
     <link rel="stylesheet" href="<?= htmlspecialchars($mainCssUrl) ?>">
 
@@ -36,21 +38,33 @@ $rootFolder = '/Unipart-job-finder';
 
     <!-- Page-specific CSS -->
     <?php
-        if (isset($extraCSS) && is_array($extraCSS)) {
-            foreach ($extraCSS as $cssFile) {
-                // If the file is a root-relative path, try to append filemtime for cache-busting
-                $cssUrl = $cssFile;
-                if (strpos($cssFile, '/') === 0) {
-                    $cssFilePath = $_SERVER['DOCUMENT_ROOT'] . $cssFile;
-                    if (file_exists($cssFilePath)) {
-                        $cssUrl .= '?v=' . filemtime($cssFilePath);
-                    }
+    if (isset($extraCSS) && is_array($extraCSS)) {
+        foreach ($extraCSS as $cssFile) {
+            $cssUrl = $cssFile;
+            if (strpos($cssFile, '/') === 0) {
+                $cssFilePath = $_SERVER['DOCUMENT_ROOT'] . $cssFile;
+                if (file_exists($cssFilePath)) {
+                    $cssUrl .= '?v=' . filemtime($cssFilePath);
                 }
-                echo '<link rel="stylesheet" href="' . htmlspecialchars($cssUrl) . '">' . PHP_EOL;
             }
+            echo '<link rel="stylesheet" href="' . htmlspecialchars($cssUrl) . '">' . PHP_EOL;
         }
+    }
     ?>
+
+    <!--  SweetAlert2 for nicer alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        //  alert message
+        function loginAlert() {
+            //  Modern popup
+            Swal.fire('Login Required', 'Please login first to access this page.', 'info');
+
+        }
+    </script>
 </head>
+
 <body class="<?= htmlspecialchars($body_class ?? '') ?>">
 
     <!-- Navigation -->
@@ -60,71 +74,44 @@ $rootFolder = '/Unipart-job-finder';
                 UniPart <i class="fa fa-briefcase"></i>
             </a>
         </div>
-        <?php if (isset($page_type) && $page_type === 'auth'): ?>
-        <!-- Navbar for login/Register pages -->
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <?php
+            // Get user role from session
+            $role = strtolower($_SESSION['role'] ?? '');
+            // Set dashboard and profile URLs based on role
+            if ($role === 'student') {
+                $dashboardLink = $rootFolder . '/dashboard/student-dashboard.php';
+                $profileLink = $rootFolder . '/profiles/student-profile.php';
+            } elseif ($role === 'employer') {
+                $dashboardLink = $rootFolder . '/dashboard/employer-dashboard.php';
+                $profileLink = $rootFolder . '/profiles/employer-profile.php';
+            } elseif ($role === 'admin') {
+                $dashboardLink = $rootFolder . '/dashboard/admin-dashboard.php';
+                $profileLink = $rootFolder . '/admin/manage-users.php'; // or admin profile if you have one
+            } else {
+                $dashboardLink = '#';
+                $profileLink = '#';
+            }
+            ?>
+
+            <!--  Logged-in Navbar -->
             <nav>
                 <a href="<?= $rootFolder ?>/index.php">Home</a>
                 <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
-                <a href="<?= $rootFolder ?>/dashboard/admin-dashboard.php">Dashboard</a>
-                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
-            </nav>
-            <a href="<?= $rootFolder ?>/auth/register.php" class="nav-button">Register</a>
-        
-        <?php elseif (isset($page_type) && $page_type === 'employee'): ?>
-
-        <!-- Navbar for employee dashboard -->
-            <nav>
-                <a href="<?= $rootFolder ?>/home.php">Home</a>
-                <a href="<?= $rootFolder ?>/profiles/employer-profile.php">Profile</a>
-                <a href="<?= $rootFolder ?>/dashboard/employer-dashboard.php">Dashboard</a>
-                <a href="<?= $rootFolder ?>/jobs/add-jobs.php">Post a Jobs</a>
-                <a href="<?= $rootFolder ?>/jobs/edit-job.php">Manage Jobs</a>
-                
-            </nav>
-            <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
-        
-        <?php elseif (isset($page_type) && $page_type === 'student'): ?>
-
-        <!-- Navbar for student dashboard -->
-            <nav>
-                <a href="<?= $rootFolder ?>/home.php">Home</a>
-                <a href="<?= $rootFolder ?>/dashboard/student-dashboard.php">Dashboard</a>
-                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
-                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
-                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Search Job</a>
+                <a href="<?= $dashboardLink ?>">Dashboard</a>
+                <a href="<?= $profileLink ?>">Profile</a>
             </nav>
             <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
 
-        <?php elseif (isset($page_type) && $page_type === 'admin'): ?>
 
-        <!-- Navbar for admin dashboard -->
-            <nav>
-                <a href="<?= $rootFolder ?>/home.php">Home</a>
-                <a href="<?= $rootFolder ?>/dashboard/admin-dashboard.php">Dashboard</a>
-                <a href="<?= $rootFolder ?>/admin/manage-users.php">Manage Users</a>
-                <a href="<?= $rootFolder ?>/admin/manage-jobs.php">Manage Jobs</a>
-                <a href="<?= $rootFolder ?>/admin/reports.php">Reports</a>
-            </nav>
-            <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
-        
-        <?php elseif (isset($page_type) && $page_type === 'home'): ?>
-
-        <!-- Navbar for home page -->
-            <nav>
-                <a href="<?= $rootFolder ?>/home.php">Home</a>
-                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
-                <a href="<?= $rootFolder ?>/dashboard/admin-dashboard.php">Dashboard</a>
-                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
-            </nav>
-            <a href="<?= $rootFolder ?>/auth/logout.php" class="nav-button">Logout</a>
-        
         <?php else: ?>
-        <!-- Default Navbar -->
+            <!--  Not logged in – show alert on protected links -->
             <nav>
                 <a href="<?= $rootFolder ?>/index.php">Home</a>
-                <a href="<?= $rootFolder ?>/jobs/view-jobs.php">Jobs</a>
-                <a href="<?= $rootFolder ?>/dashboard/admin-dashboard.php">Dashboard</a>
-                <a href="<?= $rootFolder ?>/profiles/student-profile.php">Profile</a>
+                <a href="#" onclick="loginAlert()">Jobs</a>
+                <a href="#" onclick="loginAlert()">Dashboard</a>
+                <a href="#" onclick="loginAlert()">Profile</a>
             </nav>
             <a href="<?= $rootFolder ?>/auth/login.php" class="nav-button">Login</a>
         <?php endif; ?>

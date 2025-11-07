@@ -1,5 +1,6 @@
 <?php
 // Include backend setup
+include __DIR__ . '/../includes/auth_check.php';
 include __DIR__ . '/../includes/db_connect.php';
 include __DIR__ . '/../includes/functions.php';
 

@@ -7,8 +7,7 @@ $page_title = "Register In to UniPart";
 $extraCSS = ['/Unipart-job-finder/assets/css/auth.css']; // Page-specific CSS
 // Body class to allow page-specific header/footer styling
 $body_class = 'auth-page';
-// Page-specific JS (will be printed by footer.php)
-$extraJS = ['/Unipart-job-finder/assets/js/register.js'];
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_btn'])) {
     //  Get form data
@@ -72,7 +71,7 @@ include __DIR__ . '/../includes/header.php';
     <div class="register-card">
         <h2 class="card-title">Create Your Account</h2>
         <?php if (!empty($error)): ?>
-            <p class="error-message" style="color: red;"><?= htmlspecialchars($error) ?></p>
+            <p class="error-message" style="color: blue;"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
         <form action="register.php" method="POST" class="auth-form">
