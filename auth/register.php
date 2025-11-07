@@ -76,54 +76,88 @@ include __DIR__ . '/../includes/header.php';
 
         <form action="register.php" method="POST" class="auth-form">
 
-            <div class="form-group role-selection full">
-                <label>Register as:</label>
-                <div class="radio-group">
-                    <input type="radio" id="role-student" name="user_role" value="Student" required checked>
-                    <label for="role-student">Student</label>
+    <!-- Role Selection -->
+    <div class="form-group role-selection full">
+        <label>Register as:</label>
+        <div class="radio-group">
+            <input type="radio" id="role-student" name="user_role" value="Student" required checked>
+            <label for="role-student">Student</label>
 
-                    <input type="radio" id="role-employer" name="user_role" value="Employer" required>
-                    <label for="role-employer">Employer</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="full_name">Full Name:</label>
-                <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Create a password" required>
-            </div>
-
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
-            </div>
-
-            <div class="form-group student-field full">
-                <label for="university_id">University ID/Roll No.:</label>
-                <input type="text" id="university_id" name="university_id" placeholder="Your University ID" required>
-            </div>
-
-            <div class="form-group employer-field full" style="display:none;">
-                <label for="company_name">Company Name:</label>
-                <input type="text" id="company_name" name="company_name" placeholder="Your Company Name" required disabled>
-            </div>
-
-            <div class="form-group full">
-                <button type="submit" name="register_btn" class="submit-btn">Register</button>
-            </div>
-        </form>
-
-        <p class="login-link">Already have an account? <a href="login.php">Login here</a></p>
+            <input type="radio" id="role-employer" name="user_role" value="Employer" required>
+            <label for="role-employer">Employer</label>
+        </div>
     </div>
-</div>
+
+    <!-- Common Fields -->
+    <div class="form-group">
+        <label for="full_name">Full Name:</label>
+        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Create a password" required>
+    </div>
+
+    <div class="form-group">
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+    </div>
+
+    <!-- Student-only field -->
+    <div class="form-group student-field full">
+        <label for="university_id">University ID / Roll No.:</label>
+        <input type="text" id="university_id" name="university_id" placeholder="Your University ID">
+    </div>
+
+    <!-- Employer-only field -->
+    <div class="form-group employer-field full" style="display:none;">
+        <label for="company_name">Company Name:</label>
+        <input type="text" id="company_name" name="company_name" placeholder="Your Company Name">
+    </div>
+
+    <div class="form-group full">
+        <button type="submit" name="register_btn" class="submit-btn">Register</button>
+    </div>
+</form>
+
+<p class="login-link">Already have an account? <a href="login.php">Login here</a></p>
+
+
+<script>
+    // Get radio buttons and fields
+    const studentRadio = document.getElementById('role-student');
+    const employerRadio = document.getElementById('role-employer');
+    const studentField = document.querySelector('.student-field');
+    const employerField = document.querySelector('.employer-field');
+    const universityInput = document.getElementById('university_id');
+    const companyInput = document.getElementById('company_name');
+
+    // Function to toggle visibility
+    function toggleFields() {
+        if (studentRadio.checked) {
+            studentField.style.display = 'block';
+            employerField.style.display = 'none';
+            universityInput.disabled = false;
+            companyInput.disabled = true;
+        } else if (employerRadio.checked) {
+            studentField.style.display = 'none';
+            employerField.style.display = 'block';
+            universityInput.disabled = true;
+            companyInput.disabled = false;
+        }
+    }
+
+    // Run function on page load and whenever role changes
+    toggleFields();
+    studentRadio.addEventListener('change', toggleFields);
+    employerRadio.addEventListener('change', toggleFields);
+</script>
+
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
