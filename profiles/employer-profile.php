@@ -110,7 +110,7 @@ $students_hired = $result_hired->fetch_assoc()['students_hired'];
             <div class="detail-item"><span class="detail-label">Company Size</span><span class="detail-value"><?php echo htmlspecialchars($employer['size']); ?></span></div>
             <div class="detail-item"><span class="detail-label">Founded Year</span><span class="detail-value"><?php echo htmlspecialchars($employer['founded_year']); ?></span></div>
             <div class="detail-item"><span class="detail-label">Website</span><span class="detail-value"><a href="<?php echo htmlspecialchars($employer['website']); ?>" style="color: #007BFF;"><?php echo htmlspecialchars($employer['website']); ?></a></span></div>
-            <div class="detail-item"><span class="detail-label">Member Since</span><span class="detail-value"><?php echo date('F Y', strtotime($employer['member_since'])); ?></span></div>
+            
         </div>
     </div>
 
