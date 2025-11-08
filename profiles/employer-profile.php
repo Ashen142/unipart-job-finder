@@ -78,7 +78,7 @@ $students_hired = $result_hired->fetch_assoc()['students_hired'];
 <div class="container">
     <!-- Profile Header -->
     <div class="profile-header">
-        <div class="avatar-circle"><?php echo substr($employer['company_name'], 0, 3); ?></div>
+        <div class="avatar-circle"><?php echo strtoupper (substr($employer['company_name'], 0, 2)); ?></div>
         <div class="profile-info">
             <h1><?php echo htmlspecialchars($employer['company_name']); ?></h1>
             <?php if($employer['verified']): ?>
