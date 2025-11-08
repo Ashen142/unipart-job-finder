@@ -135,7 +135,7 @@ include __DIR__ . '/../includes/header.php';
     <?php if ($role === 'student'): ?>
         <!-- STUDENT EDIT FORM -->
         <div class="profile-card">
-            <div class="profile-header student">
+            <div class="profile-head student">
                 <div class="profile-avatar student">
                     <i class="fas fa-graduation-cap"></i>
                 </div>
@@ -230,7 +230,7 @@ include __DIR__ . '/../includes/header.php';
     <?php else: ?>
         <!-- EMPLOYER EDIT FORM -->
         <div class="profile-card">
-            <div class="profile-header employer">
+            <div class="profile-head employer">
                 <div class="profile-avatar employer">
                     <i class="fas fa-building"></i>
                 </div>
