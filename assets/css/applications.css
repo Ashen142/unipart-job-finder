@@ -255,6 +255,19 @@
             cursor: not-allowed;
             transform: none;
         }
+         .btn-danger {
+            background-color: #DC3545;
+            color: #FFFFFF;
+        }
+
+        .btn-danger:hover {
+            background-color: #C82333;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
 
         .btn-secondary {
             background-color: #6C757D;
@@ -327,6 +340,195 @@
             background-color: #D4EDDA;
             color: #28A745;
         }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid #CED4DA;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon {
+            font-size: 40px;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+
+        .stat-icon.pending {
+            background: #FFF3CD;
+            color: #FD7E14;
+        }
+
+        .stat-icon.accepted {
+            background: #D4EDDA;
+            color: #28A745;
+        }
+
+        .stat-icon.rejected {
+            background: #F8D7DA;
+            color: #DC3545;
+        }
+
+        .stat-info h3 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .stat-info p {
+            color: #6C757D;
+            font-size: 14px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-section label {
+            font-weight: 500;
+            color: #212529;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #CED4DA;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #212529;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        /* Applications Table */
+        .applications-container {
+            background: #FFFFFF;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #007BFF;
+            color: #FFFFFF;
+        }
+
+        thead th {
+            padding: 15px;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        tbody tr {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E9ECEF;
+            transition: background-color 0.3s;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #F8F9FA;
+        }
+
+        tbody tr:hover {
+            background-color: #E9ECEF;
+        }
+
+        tbody td {
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-accepted {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background-color: #F8D7DA;
+            color: #721C24;
+        }
+
+         /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            color: #CED4DA;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #6C757D;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #6C757D;
+            margin-bottom: 20px;
+        }
+
 
         /* Responsive */
         @media (max-width: 968px) {
