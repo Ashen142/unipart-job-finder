@@ -189,7 +189,7 @@ include __DIR__ . '/../includes/header.php';
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-paper-plane"></i> Submit Application
                         </button>
-                        <a href="#" class="btn btn-secondary">
+                        <a href="../dashboard/student-dashboard.php" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Back to Job
                         </a>
                     </div>
