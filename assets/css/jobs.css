@@ -42,6 +42,91 @@
             grid-template-columns: 300px 1fr;
             gap: 30px;
         }
+         .container1 {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+         /* Page Header */
+        .page-header1 {
+            background-color: #FFFFFF;
+            padding: 30px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .page-header1 h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
+        .page-header1 p {
+            color: #6C757D;
+            font-size: 16px;
+        }
+
+        .job-status-badge1 {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+
+        .status-active {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+
+        .status-closed {
+            background-color: #F8D7DA;
+            color: #721C24;
+        }
+
+        .status-pending {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+
+         /* Job Statistics Card */
+        .stats-card {
+            background-color: #F8F9FA;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #CED4DA;
+            margin-bottom: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background-color: #FFFFFF;
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #007BFF;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6C757D;
+            margin-top: 5px;
+        }
 
         /* Filter Sidebar */
         .filter-sidebar {
@@ -455,6 +540,43 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
+        /* Current Image Display */
+        .current-image {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #F8F9FA;
+            border-radius: 6px;
+            border: 1px solid #CED4DA;
+        }
+
+        .current-image img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 6px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .current-image-text {
+            font-size: 14px;
+            color: #6C757D;
+            margin-bottom: 10px;
+        }
+
+        .remove-image-btn {
+            padding: 6px 12px;
+            background-color: #DC3545;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.3s;
+        }
+
+        .remove-image-btn:hover {
+            background-color: #C82333;
+        }
 
         /* File Upload */
         .file-upload {
@@ -534,6 +656,24 @@
 
         .btn-secondary:hover {
             background-color: #5A6268;
+        }
+
+        .btn-danger {
+            background-color: #DC3545;
+            color: #FFFFFF;
+        }
+
+        .btn-danger:hover {
+            background-color: #C82333;
+        }
+
+        .btn-warning {
+            background-color: #FD7E14;
+            color: #FFFFFF;
+        }
+
+        .btn-warning:hover {
+            background-color: #E56A0D;
         }
 
         /* Alert */
