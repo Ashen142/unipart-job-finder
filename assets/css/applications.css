@@ -18,6 +18,11 @@
             margin: 40px auto;
             padding: 0 20px;
         }
+        .container1 {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
 
         /* Page Header */
         .page-header {
@@ -396,6 +401,43 @@
             font-size: 14px;
         }
 
+        .stat-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: #6C757D;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #007BFF;
+        }
+
+        .stat-card .stat-icon {
+            float: right;
+            font-size: 32px;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            color: #007BFF;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            color: #FD7E14;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            color: #28A745;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            color: #DC3545;
+        }
+
+
         /* Filter Section */
         .filter-section {
             background: #FFFFFF;
@@ -430,6 +472,43 @@
             border-color: #007BFF;
             box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
         }
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #212529;
+            font-size: 14px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #CED4DA;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #FFFFFF;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
 
         /* Applications Table */
         .applications-container {
@@ -437,6 +516,20 @@
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
+        }
+
+        .applications-section {
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            color: #000000;
+            margin-bottom: 20px;
         }
 
         .table-responsive {
@@ -481,6 +574,37 @@
             font-size: 14px;
         }
 
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007BFF;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .student-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 2px;
+        }
+
+        .student-details p {
+            font-size: 13px;
+            color: #6C757D;
+        }
+
         /* Status Badges */
         .status-badge {
             display: inline-block;
@@ -504,6 +628,44 @@
         .status-rejected {
             background-color: #F8D7DA;
             color: #721C24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+        }
+
+        .btn-success {
+            background-color: #28A745;
+            color: #FFFFFF;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #DC3545;
+            color: #FFFFFF;
+        }
+
+        .btn-danger:hover {
+            background-color: #C82333;
+        }
+
+        .btn-info {
+            background-color: #17A2B8;
+            color: #FFFFFF;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
         }
 
          /* Empty State */
