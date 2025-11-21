@@ -10,7 +10,7 @@ include __DIR__ . '/../includes/functions.php';
 
 // Page settings
 // -------------------------------
-$page_title = "Admin Dashboard - UniPart";
+$page_title = "Manage users - UniPart";
 $extraCSS = ['/Unipart-job-finder/assets/css/admin.css'];
 $body_class = 'dashboard-page';
 $page_type = 'admin';
