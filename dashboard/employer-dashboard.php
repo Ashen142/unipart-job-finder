@@ -105,7 +105,7 @@ include __DIR__ . '/../includes/header.php';
     <div class="main-content">
         <div class="header">
             <h1>Hello, <?= htmlspecialchars($employer_name) ?></h1>
-            <a href="/Unipart-job-finder/jobs/edit-job.php" class="view-all">View All</a>
+            <a href="/Unipart-job-finder/jobs/view-jobs.php" class="view-all">View All</a>
         </div>
 
         <!-- Stats Grid -->
@@ -152,7 +152,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title">Your Job Listings</h2>
-                    <a href="/Unipart-job-finder/jobs/edit-job.php" class="view-all">View All</a>
+                    <a href="/Unipart-job-finder/jobs/view-jobs.php" class="view-all">View All</a>
                 </div>
 
                 <?php if ($jobs_result && $jobs_result->num_rows > 0): ?>
@@ -198,7 +198,7 @@ include __DIR__ . '/../includes/header.php';
                 <div class="quick-links" style="margin-top: 2rem;">
                     <h2 class="section-title">Quick Links</h2>
                     <button class="quick-link-btn"><a href="../jobs/add-job.php">Post New Job</a></button>
-                    <button class="quick-link-btn"><a href="../jobs/edit-job.php">Manage Jobs</a></button>
+                    <button class="quick-link-btn"><a href="../jobs/view-jobs.php">View All Jobs</a></button>
                     <button class="quick-link-btn"><a href="../applications/employer-applications.php">View Applicants</a></button>
                 </div>
             </div>
