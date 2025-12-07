@@ -318,6 +318,15 @@
             background-color: #17A2B8;
             color: #FFFFFF;
         }
+        .alert.show {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
 
         /* Helper Text */
         .helper-text {

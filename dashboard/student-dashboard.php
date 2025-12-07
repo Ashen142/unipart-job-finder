@@ -108,12 +108,9 @@ include __DIR__ . '/../includes/header.php';
                                 <span>₱<?= htmlspecialchars($job['pay']) ?></span>
                             </div>
                             <div class="job-actions">
-                                <a href="/Unipart-job-finder/jobs/job-details.php?id=<?= $job['job_id'] ?>" class="view-paid">View</a>
-                                <form action="/Unipart-job-finder/applications/apply-job.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="job_id" value="<?= $job['job_id'] ?>">
-                                    <button type="submit" class="apply-btn">Apply Now</button>
-                                </form>
-                            </div>
+    <a href="/Unipart-job-finder/jobs/job-details.php?job_id=<?= $job['job_id'] ?>" class="view-paid">View</a>
+    <a href="/Unipart-job-finder/applications/apply-job.php?job_id=<?= $job['job_id'] ?>" class="apply-btn" style="text-decoration: none;">Apply Now</a>
+</div>
                         </div>
                     </div>
                 <?php endwhile; ?>
