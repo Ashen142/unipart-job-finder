@@ -92,14 +92,7 @@ include __DIR__ . '/../includes/header.php';
 
 <!-- Main Container -->
 <div class="container1">
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-        <a href="../index.php"><i class="fas fa-home"></i> Home</a>
-        <span>/</span>
-        <a href="view-jobs.php">Jobs</a>
-        <span>/</span>
-        <span><?php echo htmlspecialchars($job['title']); ?></span>
-    </div>
+    
 
     <!-- Alert for already applied -->
     <?php if ($has_applied): ?>
