@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = "Application submitted successfully!";
-                header("Location: ../applications/my-applications.php");
+                header("Location: student-applications.php");
                 exit();
             } else {
                 $error_message = "Error submitting application: " . $conn->error;
