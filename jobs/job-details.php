@@ -98,7 +98,7 @@ include __DIR__ . '/../includes/header.php';
     <?php if ($has_applied): ?>
         <div class="alert alert-info">
             <i class="fas fa-check-circle"></i>
-            You have already applied for this job. Check your <a href="../applications/my-applications.php" style="color: #FFFFFF; text-decoration: underline;">applications</a> for status updates.
+            You have already applied for this job. Check your <a href="../applications/student-applications.php" style="color: #FFFFFF; text-decoration: underline;">applications</a> for status updates.
         </div>
     <?php endif; ?>
 
