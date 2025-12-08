@@ -14,7 +14,7 @@ $job_id = intval($_GET['job_id']);
 
 // Fetch job details with company information
 $job_query = "SELECT j.*, e.company_name, e.industry, e.size, e.founded_year,
-              e.website, e.description, e.hr_email, e.office_address, e.verified
+              e.website, e.description as company_description, e.hr_email, e.office_address, e.verified
               FROM jobs j 
               JOIN employers e ON j.employer_id = e.employer_id 
               WHERE j.job_id = ?";
