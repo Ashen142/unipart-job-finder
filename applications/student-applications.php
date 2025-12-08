@@ -188,7 +188,7 @@ include __DIR__ . '/../includes/header.php';
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="view-application.php?application_id=<?php echo $app['application_id']; ?>" 
+                                    <a href="/Unipart-job-finder/jobs/job-details.php?job_id=<?php echo $app['job_id']; ?>" 
                                        class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i> View
                                     </a>
