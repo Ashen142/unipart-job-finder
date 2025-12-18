@@ -6,11 +6,11 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-            background-color: #e8e8e8 !important;
-            color: #333 !important;
+            background-color: #0f0f0f !important;
+            color: #e0e0e0 !important;
         }
         body .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
             padding: 4rem 2rem !important;
             text-align: left !important;
             max-width: 1200px !important;
@@ -85,7 +85,7 @@
         .featured-section h2 {
             font-size: 2rem;
             margin-bottom: 2rem;
-            color: #1a1a1a;
+            color: #ffffff !important;
         }
 
         .job-cards {
@@ -96,17 +96,18 @@
         }
 
         .job-card {
-            background-color: white;
+            background-color: #2a2a2a !important;
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
         }
 
         .job-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
         }
 
         .job-card-header {
@@ -119,12 +120,13 @@
         .job-icon {
             width: 40px;
             height: 40px;
-            background-color: #f0f0f0;
+            background-color: #3a3a3a !important;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
+            color: #ff6b6b !important;
         }
 
         .salary-badge {
@@ -144,17 +146,17 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin: 1rem 0 0.5rem 0;
-            color: #1a1a1a;
+            color: #ffffff !important;
         }
 
         .job-info {
-            color: #888;
+            color: #cccccc !important;
             font-size: 0.95rem;
             margin-bottom: 0.3rem;
         }
 
         .view-details-btn {
-            background-color: #2196f3;
+            background-color: #ff6b6b !important;
             color: white;
             padding: 0.7rem 1.5rem;
             border: none;
@@ -167,7 +169,7 @@
         }
 
         .view-details-btn:hover {
-            background-color: #1976d2;
+            background-color: #ee5a24 !important;
         }
 
         .browse-all {
@@ -176,7 +178,7 @@
         }
 
         .browse-all-btn {
-            background-color: #2196f3;
+            background-color: #ff6b6b !important;
             color: white;
             padding: 1rem 2.5rem;
             border: none;
@@ -188,7 +190,7 @@
         }
 
         .browse-all-btn:hover {
-            background-color: #1976d2;
+            background-color: #ee5a24 !important;
             transform: scale(1.05);
         }
 
@@ -202,20 +204,20 @@ body .container {
 /* How It Works Section */
 body .how-it-works {
     padding: 80px 0 !important;
-    background-color: #f8f9fa !important;
+    background-color: #1a1a1a !important;
 }
 
 .how-it-works h2 {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #1a1a1a;
+    color: #ffffff !important;
 }
 
 .section-subtitle {
     text-align: center;
     font-size: 1.2rem;
-    color: #666;
+    color: #cccccc !important;
     margin-bottom: 4rem;
 }
 
@@ -227,14 +229,15 @@ body .how-it-works {
 }
 
 .step-card {
-    background: white;
+    background: #2a2a2a !important;
     padding: 3rem 2rem;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .step-card::before {
@@ -244,12 +247,12 @@ body .how-it-works {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #ff6b6b, #ee5a24) !important;
 }
 
 .step-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
 }
 
 .step-number {
@@ -258,7 +261,7 @@ body .how-it-works {
     right: 20px;
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -270,18 +273,18 @@ body .how-it-works {
 
 .step-icon {
     font-size: 3rem;
-    color: #667eea;
+    color: #ff6b6b !important;
     margin-bottom: 1.5rem;
 }
 
 .step-card h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #1a1a1a;
+    color: #ffffff !important;
 }
 
 .step-card p {
-    color: #666;
+    color: #cccccc !important;
     line-height: 1.6;
 }
 
@@ -294,12 +297,12 @@ body .how-it-works {
 .section-header h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #1a1a1a;
+    color: #ffffff !important;
 }
 
 .section-header p {
     font-size: 1.2rem;
-    color: #666;
+    color: #cccccc !important;
     max-width: 600px;
     margin: 0 auto;
 }
@@ -438,7 +441,7 @@ body .how-it-works {
 /* Categories Section */
 .categories-section {
     padding: 80px 0;
-    background: white;
+    background: #1a1a1a !important;
 }
 
 .categories-grid {
@@ -449,27 +452,27 @@ body .how-it-works {
 }
 
 .category-card {
-    background: white;
+    background: #2a2a2a !important;
     padding: 2.5rem 2rem;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
     transition: all 0.3s ease;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #e9ecef;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .category-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    border-color: #667eea;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+    border-color: #ff6b6b !important;
 }
 
 .category-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -482,18 +485,18 @@ body .how-it-works {
 .category-card h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
-    color: #1a1a1a;
+    color: #ffffff !important;
 }
 
 .category-card p {
-    color: #666;
+    color: #cccccc !important;
     line-height: 1.5;
 }
 
 /* Statistics Section */
 .stats-section {
     padding: 80px 0;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
     color: white;
 }
 
@@ -505,7 +508,7 @@ body .how-it-works {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(10px);
     padding: 2rem;
     border-radius: 12px;
@@ -517,17 +520,20 @@ body .how-it-works {
     font-size: 3rem;
     margin-bottom: 1rem;
     opacity: 0.9;
+    color: #ff6b6b !important;
 }
 
 .stat-content h3 {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: #ffffff !important;
 }
 
 .stat-content p {
     opacity: 0.9;
     font-size: 1.1rem;
+    color: #e0e0e0 !important;
 }
 
 /* Call to Action Section */
@@ -574,13 +580,13 @@ body .how-it-works {
 }
 
 .cta-btn.primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
     color: white;
 }
 
 .cta-btn.primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4) !important;
 }
 
 .cta-btn.secondary {
