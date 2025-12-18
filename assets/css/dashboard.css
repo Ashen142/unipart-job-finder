@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #e8eef5 0%, #f0f4f8 100%);
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
     min-height: 100vh;
     
     }
@@ -14,10 +14,11 @@ body {
 .container {
     max-width: 1400px;
     margin: 0 auto;
-            background: white;
+            background: #2a2a2a;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 .notification-icon {
             color: #e74c3c;
@@ -38,11 +39,11 @@ body {
 
         .header h1 {
             font-size: 2rem;
-            color: #2c3e50;
+            color: #ffffff;
         }
 
         .view-all {
-            color: #7f8c8d;
+            color: #cccccc;
             text-decoration: none;
             font-size: 1rem;
         }
