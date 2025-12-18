@@ -269,6 +269,11 @@
             background-color: #C82333;
         }
 
+        .btn-complete{
+            background-color: #28A745;
+            color: #FFFFFF;
+        }
+
         .btn-sm {
             padding: 6px 12px;
             font-size: 12px;
