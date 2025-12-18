@@ -53,44 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw_application'
 
 }
 
-// Handle complete request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_application'])) {
-    $application_id = intval($_POST['application_id']);
-    
-    // Verify this application belongs to current student and is Accepted
-    $verify_query = "SELECT application_id FROM applications WHERE application_id = ? AND student_id = ? AND status = 'Accepted'";
-    $stmt = $conn->prepare($verify_query);
-    $stmt->bind_param("ii", $application_id, $student_id);
-    $stmt->execute();
-    $verify_result = $stmt->get_result();
-    
-    if ($verify_result->num_rows > 0) {
-        // Update the application status to 'Completed'
-        $update_query = "UPDATE applications SET status = 'Completed' WHERE application_id = ?";
-        $stmt = $conn->prepare($update_query);
-        $stmt->bind_param("i", $application_id);
-        
-        if ($stmt->execute()) {
-            $_SESSION['success_message'] = "Application marked as complete successfully!";
-        } else {
-            $_SESSION['error_message'] = "Failed to complete application.";
-        }
-    } else {
-        $_SESSION['error_message'] = "Cannot complete this application.";
-    }
-    
-    // Redirect to prevent form resubmission
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
-}
-
 // Get statistics
 $stats_query = "SELECT 
                     COUNT(*) as total,
                     SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as pending,
                     SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) as accepted,
-                    SUM(CASE WHEN status = 'Rejected' THEN 1 ELSE 0 END) as rejected,
-                    SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) as completed
+                    SUM(CASE WHEN status = 'Rejected' THEN 1 ELSE 0 END) as rejected
                 FROM applications 
                 WHERE student_id = ?";
 $stmt = $conn->prepare($stats_query);
@@ -183,7 +151,6 @@ include __DIR__ . '/../includes/header.php';
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
             <option value="rejected">Rejected</option>
-            <option value="completed">Completed</option>
         </select>
     </div>
 
@@ -230,11 +197,6 @@ include __DIR__ . '/../includes/header.php';
                                                 class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash"></i> Withdraw
                                         </button>
-                                    <?php elseif ($app['status'] === 'Accepted'): ?>
-                                        <button onclick="completeApplication(<?php echo $app['application_id']; ?>)" 
-                                                class="btn btn-complete btn-sm">
-                                            <i class="fas fa-check-circle"></i> Complete
-                                        </button>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -261,12 +223,6 @@ include __DIR__ . '/../includes/header.php';
     <input type="hidden" name="application_id" id="withdrawApplicationId">
 </form>
 
-<!-- Complete Form (Hidden) -->
-<form id="completeForm" method="POST" style="display: none;">
-    <input type="hidden" name="complete_application" value="1">
-    <input type="hidden" name="application_id" id="completeApplicationId">
-</form>
-
 <script>
     // Filter applications by status
     document.getElementById('statusFilter').addEventListener('change', function() {
@@ -288,14 +244,6 @@ include __DIR__ . '/../includes/header.php';
         if (confirm('Are you sure you want to withdraw this application? This action cannot be undone.')) {
             document.getElementById('withdrawApplicationId').value = applicationId;
             document.getElementById('withdrawForm').submit();
-        }
-    }
-
-    // Complete application
-    function completeApplication(applicationId) {
-        if (confirm('Are you sure you want to mark this application as complete?')) {
-            document.getElementById('completeApplicationId').value = applicationId;
-            document.getElementById('completeForm').submit();
         }
     }
 </script>
