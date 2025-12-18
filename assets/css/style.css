@@ -1,10 +1,10 @@
 /* Color Palette [cite: 225] */
 :root {
-    --primary-color: #ff6b6b; /* Red/Orange */
-    --background-color: #0f0f0f; /* Dark Grey */
-    --text-color: #e0e0e0; /* Light Grey */
-    --heading-color: #ffffff; /* White */
-    --input-border-color: #333333; /* Dark grey */
+    --primary-color: #007BFF; /* Blue */
+    --background-color: #F8F9FA; /* Light Grey */
+    --text-color: #212529; /* Dark Grey */
+    --heading-color: #000000; /* Black */
+    --input-border-color: #CED4DA; /* Light grey */
     --white: #FFFFFF;
 }
 
@@ -14,7 +14,6 @@ body {
     color: var(--text-color);
     margin: 0;
     padding: 0;
-    padding-top: 70px; /* Account for fixed navbar */
     background-color: var(--background-color);
 }
 
@@ -25,20 +24,13 @@ h1, h2, h3 {
 
 /* Navbar / Header Styling [cite: 259] */
 .navbar {
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
+    background-color: var(--primary-color);
     color: var(--white);
     padding: 15px 40px; /* Padding: 15px top/bottom [cite: 263] */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .navbar a {
     color: var(--white);
@@ -50,13 +42,12 @@ h1, h2, h3 {
     border-bottom: 2px solid transparent;
 }
 .navbar a:hover {
-    border-bottom: 2px solid #ff6b6b; /* Hover link with gradient color */
+    border-bottom: 2px solid #E0E0E0; /* Hover link [cite: 261] */
 }
 .navbar .logo {
     font-size: 24px;
     font-weight: bold;
     font-family: 'Poppins', sans-serif;
-    color: #ff6b6b; /* Match gradient color */
 }
 .navbar .nav-button {
     /* background-color: #0069D9; Darker blue for contrast */
