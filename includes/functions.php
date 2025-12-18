@@ -55,11 +55,3 @@ function get_flash($key) {
     }
     return null;
 }
-
-//  Admin logging
-function logAdminAction($admin_user_id, $action) {
-    global $conn;
-    $stmt = $conn->prepare("INSERT INTO admin_logs (admin_user_id, action) VALUES (?, ?)");
-    $stmt->bind_param("is", $admin_user_id, $action);
-    $stmt->execute();
-}
