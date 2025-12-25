@@ -10,6 +10,17 @@ $page_title = $page_title ?? "UniPart - Part-Time Job Finder";
 
 // Site root used for root-relative asset URLs
 $rootFolder = '/Unipart-job-finder';
+// Define BASE_URL for backward compatibility with templates that use it
+if (!defined('BASE_URL')) {
+    // Ensure trailing slash so concatenation works: BASE_URL + 'jobs/...'
+    define('BASE_URL', rtrim($rootFolder, '/') . '/');
+}
+
+// Optional override to force the displayed success rate (percentage 0-100).
+// Set to an integer to override (e.g., 50), or leave undefined/null to use the live calculation.
+if (!defined('FORCE_SUCCESS_RATE')) {
+    define('FORCE_SUCCESS_RATE', 50); // <-- change this value or set to null to disable
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,13 +51,18 @@ $rootFolder = '/Unipart-job-finder';
     <?php
     if (isset($extraCSS) && is_array($extraCSS)) {
         foreach ($extraCSS as $cssFile) {
-            $cssUrl = $cssFile;
-            if (strpos($cssFile, '/') === 0) {
-                $cssFilePath = $_SERVER['DOCUMENT_ROOT'] . $cssFile;
-                if (file_exists($cssFilePath)) {
-                    $cssUrl .= '?v=' . filemtime($cssFilePath);
-                }
+            // Ensure root-relative path so it works from any folder
+            if (strpos($cssFile, '/') !== 0) {
+                $cssFile = rtrim($rootFolder, '/') . '/' . ltrim($cssFile, '/');
             }
+
+            $cssUrl = $cssFile;
+            $cssFilePath = $_SERVER['DOCUMENT_ROOT'] . $cssFile;
+            if (file_exists($cssFilePath)) {
+                // Append filemtime for cache-busting
+                $cssUrl .= '?v=' . filemtime($cssFilePath);
+            }
+
             echo '<link rel="stylesheet" href="' . htmlspecialchars($cssUrl) . '">' . PHP_EOL;
         }
     }

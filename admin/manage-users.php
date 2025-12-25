@@ -8,8 +8,211 @@ include __DIR__ . '/../includes/auth_check.php';
 include __DIR__ . '/../includes/db_connect.php';
 include __DIR__ . '/../includes/functions.php';
 
+// Restrict to Admin role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: /Unipart-job-finder/auth/login.php");
+    exit();
+}
+
+// Handle POST requests for user management
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    $user_id = intval($_POST['user_id'] ?? 0);
+
+    if (!$user_id) {
+        $_SESSION['error'] = "Invalid user ID.";
+        header("Location: /Unipart-job-finder/admin/manage-users.php");
+        exit();
+    }
+
+    switch ($action) {
+        case 'approve':
+            // For employers, set verified = 1
+            $stmt = $conn->prepare("UPDATE employers SET verified = 1 WHERE user_id = ?");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+
+            // Log admin action
+            logAdminAction($_SESSION['user_id'], "Approved user ID $user_id");
+            $_SESSION['success'] = "User approved successfully!";
+            break;
+
+        case 'suspend':
+            // Add a status field to users table or use a different approach
+            // For now, we'll use a simple approach - could add status to users table later
+            $_SESSION['error'] = "Suspend functionality not yet implemented.";
+            break;
+
+        case 'reactivate':
+            // Reactivate suspended user
+            $_SESSION['error'] = "Reactivate functionality not yet implemented.";
+            break;
+
+        case 'delete':
+            // Check if user has associated data
+            $checkStmt = $conn->prepare("
+                SELECT 
+                    (SELECT COUNT(*) FROM students WHERE user_id = ?) +
+                    (SELECT COUNT(*) FROM employers WHERE user_id = ?) +
+                    (SELECT COUNT(*) FROM applications WHERE student_id IN (SELECT student_id FROM students WHERE user_id = ?)) +
+                    (SELECT COUNT(*) FROM jobs WHERE employer_id IN (SELECT employer_id FROM employers WHERE user_id = ?)) as total_records
+            ");
+            $checkStmt->bind_param("iiii", $user_id, $user_id, $user_id, $user_id);
+            $checkStmt->execute();
+            $result = $checkStmt->get_result()->fetch_assoc();
+
+            if ($result['total_records'] > 0) {
+                $_SESSION['error'] = "Cannot delete user with associated data. User has active records.";
+            } else {
+                $stmt = $conn->prepare("DELETE FROM users WHERE user_id = ?");
+                $stmt->bind_param("i", $user_id);
+                if ($stmt->execute()) {
+                    // Log admin action
+                    logAdminAction($_SESSION['user_id'], "Deleted user ID $user_id");
+                    $_SESSION['success'] = "User deleted successfully!";
+                } else {
+                    $_SESSION['error'] = "Failed to delete user.";
+                }
+            }
+            break;
+
+        default:
+            $_SESSION['error'] = "Invalid action.";
+    }
+
+    header("Location: /Unipart-job-finder/admin/manage-users.php");
+    exit();
+}
+
+// Get statistics
+$stats_query = $conn->query("
+    SELECT
+        COUNT(*) as total_users,
+        SUM(CASE WHEN role = 'Student' THEN 1 ELSE 0 END) as total_students,
+        SUM(CASE WHEN role = 'Employer' THEN 1 ELSE 0 END) as total_employers,
+        SUM(CASE WHEN role = 'Admin' THEN 1 ELSE 0 END) as total_admins,
+        SUM(CASE WHEN u.user_id IN (SELECT user_id FROM employers WHERE verified = 0) THEN 1 ELSE 0 END) as pending_employers
+    FROM users u
+");
+$stats = $stats_query ? $stats_query->fetch_assoc() : [
+    'total_users' => 0,
+    'total_students' => 0,
+    'total_employers' => 0,
+    'total_admins' => 0,
+    'pending_employers' => 0
+];
+
+// Get users with pagination
+$page = intval($_GET['page'] ?? 1);
+$per_page = 10;
+$offset = ($page - 1) * $per_page;
+
+// Filters
+$search = $_GET['search'] ?? '';
+$role_filter = $_GET['role'] ?? '';
+$status_filter = $_GET['status'] ?? '';
+$verified_filter = $_GET['verified'] ?? '';
+
+// Build query
+$sql = "
+    SELECT
+        u.user_id,
+        u.name,
+        u.email,
+        u.role,
+        u.member_since,
+        u.created_at,
+        CASE
+            WHEN u.role = 'Employer' THEN COALESCE(e.verified, 0)
+            ELSE 1
+        END as verified,
+        CASE
+            WHEN u.role = 'Employer' THEN e.company_name
+            ELSE NULL
+        END as company_name,
+        CASE
+            WHEN u.role = 'Student' THEN s.university_id
+            ELSE NULL
+        END as university_id
+    FROM users u
+    LEFT JOIN employers e ON u.user_id = e.user_id
+    LEFT JOIN students s ON u.user_id = s.user_id
+    WHERE 1=1
+";
+
+$params = [];
+$types = '';
+
+if ($search) {
+    $sql .= " AND (u.name LIKE ? OR u.email LIKE ? OR e.company_name LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $types .= 'sss';
+}
+
+if ($role_filter) {
+    $sql .= " AND u.role = ?";
+    $params[] = $role_filter;
+    $types .= 's';
+}
+
+if ($verified_filter === 'verified') {
+    $sql .= " AND (u.role != 'Employer' OR e.verified = 1)";
+    // No additional parameters needed
+} elseif ($verified_filter === 'unverified') {
+    $sql .= " AND u.role = 'Employer' AND e.verified = 0";
+    // No additional parameters needed
+}
+
+$sql .= " ORDER BY u.created_at DESC LIMIT ? OFFSET ?";
+$params[] = $per_page;
+$params[] = $offset;
+$types .= 'ii';
+
+$stmt = $conn->prepare($sql);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$users = $stmt->get_result();
+
+// Get total count for pagination
+$count_sql = "SELECT COUNT(*) as total FROM users u LEFT JOIN employers e ON u.user_id = e.user_id WHERE 1=1";
+
+$count_params = [];
+$count_types = '';
+
+if ($search) {
+    $count_sql .= " AND (u.name LIKE ? OR u.email LIKE ? OR e.company_name LIKE ?)";
+    $count_params[] = "%$search%";
+    $count_params[] = "%$search%";
+    $count_params[] = "%$search%";
+    $count_types .= 'sss';
+}
+
+if ($role_filter) {
+    $count_sql .= " AND u.role = ?";
+    $count_params[] = $role_filter;
+    $count_types .= 's';
+}
+
+if ($verified_filter === 'verified') {
+    $count_sql .= " AND (u.role != 'Employer' OR e.verified = 1)";
+} elseif ($verified_filter === 'unverified') {
+    $count_sql .= " AND u.role = 'Employer' AND e.verified = 0";
+}
+
+$count_stmt = $conn->prepare($count_sql);
+if (!empty($count_params)) {
+    $count_stmt->bind_param($count_types, ...$count_params);
+}
+$count_stmt->execute();
+$count_result = $count_stmt->get_result()->fetch_assoc();
+$total_users = $count_result ? $count_result['total'] : 0;
+$total_pages = ceil($total_users / $per_page);
+
 // Page settings
-// -------------------------------
 $page_title = "Manage users - UniPart";
 $extraCSS = ['/Unipart-job-finder/assets/css/admin.css'];
 $body_class = 'dashboard-page';
@@ -23,15 +226,19 @@ include __DIR__ . '/../includes/header.php';
     <div class="container">
 
         <!-- Alert Messages -->
-        <div class="alert alert-success" id="successAlert">
-            <i class="fas fa-check-circle"></i>
-            <span id="successMessage">Action completed successfully!</span>
-        </div>
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <span><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></span>
+            </div>
+        <?php endif; ?>
 
-        <div class="alert alert-error" id="errorAlert">
-            <i class="fas fa-exclamation-circle"></i>
-            <span id="errorMessage">An error occurred. Please try again.</span>
-        </div>
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <span><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></span>
+            </div>
+        <?php endif; ?>
 
         <!-- Page Header -->
         <div class="page-header">
@@ -44,7 +251,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="stat-card">
                 <div class="stat-card-header">
                     <div>
-                        <div class="stat-value">156</div>
+                        <div class="stat-value"><?php echo $stats['total_users']; ?></div>
                         <div class="stat-label">Total Users</div>
                     </div>
                     <div class="stat-icon icon-blue">
@@ -56,7 +263,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="stat-card">
                 <div class="stat-card-header">
                     <div>
-                        <div class="stat-value">98</div>
+                        <div class="stat-value"><?php echo $stats['total_students']; ?></div>
                         <div class="stat-label">Students</div>
                     </div>
                     <div class="stat-icon icon-green">
@@ -68,7 +275,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="stat-card">
                 <div class="stat-card-header">
                     <div>
-                        <div class="stat-value">55</div>
+                        <div class="stat-value"><?php echo $stats['total_employers']; ?></div>
                         <div class="stat-label">Employers</div>
                     </div>
                     <div class="stat-icon icon-orange">
@@ -80,7 +287,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="stat-card">
                 <div class="stat-card-header">
                     <div>
-                        <div class="stat-value">12</div>
+                        <div class="stat-value"><?php echo $stats['pending_employers']; ?></div>
                         <div class="stat-label">Pending Approval</div>
                     </div>
                     <div class="stat-icon icon-purple">
@@ -92,55 +299,55 @@ include __DIR__ . '/../includes/header.php';
 
 
         <!-- Filter Section -->
-        <div class="filter-section">
+        <form method="GET" class="filter-section">
             <div class="filter-grid">
                 <div class="filter-group">
                     <label for="searchUser">Search Users</label>
-                    <input type="text" id="searchUser" class="filter-control search-input" placeholder="Search by name, email, or company...">
+                    <input type="text" id="searchUser" name="search" class="filter-control search-input" placeholder="Search by name, email, or company..." value="<?php echo htmlspecialchars($search); ?>">
                 </div>
 
                 <div class="filter-group">
                     <label for="filterRole">User Role</label>
-                    <select id="filterRole" class="filter-control">
+                    <select id="filterRole" name="role" class="filter-control">
                         <option value="">All Roles</option>
-                        <option value="student">Student</option>
-                        <option value="employer">Employer</option>
-                        <option value="admin">Admin</option>
+                        <option value="Student" <?php echo $role_filter === 'Student' ? 'selected' : ''; ?>>Student</option>
+                        <option value="Employer" <?php echo $role_filter === 'Employer' ? 'selected' : ''; ?>>Employer</option>
+                        <option value="Admin" <?php echo $role_filter === 'Admin' ? 'selected' : ''; ?>>Admin</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
                     <label for="filterStatus">Status</label>
-                    <select id="filterStatus" class="filter-control">
+                    <select id="filterStatus" name="status" class="filter-control">
                         <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="pending">Pending</option>
-                        <option value="suspended">Suspended</option>
+                        <option value="active" <?php echo $status_filter === 'active' ? 'selected' : ''; ?>>Active</option>
+                        <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
+                        <option value="suspended" <?php echo $status_filter === 'suspended' ? 'selected' : ''; ?>>Suspended</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
                     <label for="filterVerified">Verification</label>
-                    <select id="filterVerified" class="filter-control">
+                    <select id="filterVerified" name="verified" class="filter-control">
                         <option value="">All</option>
-                        <option value="verified">Verified</option>
-                        <option value="unverified">Unverified</option>
+                        <option value="verified" <?php echo $verified_filter === 'verified' ? 'selected' : ''; ?>>Verified</option>
+                        <option value="unverified" <?php echo $verified_filter === 'unverified' ? 'selected' : ''; ?>>Unverified</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
                     <label>&nbsp;</label>
                     <div>
-                        <button class="btn-filter" onclick="applyFilters()">
+                        <button type="submit" class="btn-filter">
                             <i class="fas fa-search"></i> Filter
                         </button>
-                        <button class="btn-reset" onclick="resetFilters()">
+                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="btn-reset">
                             <i class="fas fa-redo"></i> Reset
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
 
         <!-- All Users Tab -->
         <div class="tab-content active" id="allTab">
@@ -168,211 +375,130 @@ include __DIR__ . '/../includes/header.php';
                         </tr>
                     </thead>
                     <tbody id="usersTableBody">
-                        <tr>
-                            <td>#U001</td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar">AS</div>
-                                    <div class="user-details">
-                                        <span class="user-name">Amal Silva</span>
-                                        <span class="user-email">amal.silva@email.com</span>
+                        <?php if ($users->num_rows > 0): ?>
+                            <?php while ($user = $users->fetch_assoc()): ?>
+                            <tr>
+                                <td>#U<?php echo str_pad($user['user_id'], 3, '0', STR_PAD_LEFT); ?></td>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar" style="background-color: <?php
+                                            $colors = ['#007BFF', '#28A745', '#FD7E14', '#6F42C1', '#DC3545', '#17A2B8', '#FFC107', '#6C757D'];
+                                            echo $colors[$user['user_id'] % count($colors)];
+                                        ?>;">
+                                            <?php echo strtoupper(substr($user['name'], 0, 2)); ?>
+                                        </div>
+                                        <div class="user-details">
+                                            <span class="user-name"><?php echo htmlspecialchars($user['name']); ?></span>
+                                            <span class="user-email"><?php echo htmlspecialchars($user['email']); ?></span>
+                                            <?php if ($user['company_name']): ?>
+                                                <span class="user-company"><?php echo htmlspecialchars($user['company_name']); ?></span>
+                                            <?php elseif ($user['university_id']): ?>
+                                                <span class="user-university"><?php echo htmlspecialchars($user['university_id']); ?></span>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td><span class="role-badge role-student">Student</span></td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td><span class="status-badge status-verified">Verified</span></td>
-                            <td>Oct 15, 2025</td>
-                            <td>2 hours ago</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action btn-view" onclick="viewUser(1)" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action btn-suspend" onclick="suspendUser(1)" title="Suspend">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete" onclick="deleteUser(1)" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#U002</td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar" style="background-color: #28A745;">TI</div>
-                                    <div class="user-details">
-                                        <span class="user-name">Tech Innovations Pvt Ltd</span>
-                                        <span class="user-email">hr@techinnovations.lk</span>
+                                </td>
+                                <td><span class="role-badge role-<?php echo strtolower($user['role']); ?>"><?php echo htmlspecialchars($user['role']); ?></span></td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>
+                                    <?php if ($user['role'] === 'Employer'): ?>
+                                        <span class="status-badge status-<?php echo $user['verified'] ? 'verified' : 'pending'; ?>">
+                                            <?php echo $user['verified'] ? 'Verified' : 'Pending'; ?>
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="status-badge status-verified">Verified</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo date("M d, Y", strtotime($user['member_since'])); ?></td>
+                                <td><?php echo date("M d, Y", strtotime($user['created_at'])); ?></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action btn-view" onclick="viewUser(<?php echo $user['user_id']; ?>)" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <?php if ($user['role'] === 'Employer' && !$user['verified']): ?>
+                                        <button class="btn-action btn-approve" onclick="approveUser(<?php echo $user['user_id']; ?>)" title="Approve">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <?php endif; ?>
+                                        <button class="btn-action btn-suspend" onclick="suspendUser(<?php echo $user['user_id']; ?>)" title="Suspend">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                        <button class="btn-action btn-delete" onclick="deleteUser(<?php echo $user['user_id']; ?>)" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
-                                </div>
-                            </td>
-                            <td><span class="role-badge role-employer">Employer</span></td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td><span class="status-badge status-verified">Verified</span></td>
-                            <td>Oct 20, 2025</td>
-                            <td>1 day ago</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action btn-view" onclick="viewUser(2)" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action btn-suspend" onclick="suspendUser(2)" title="Suspend">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete" onclick="deleteUser(2)" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#U003</td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar" style="background-color: #FD7E14;">NP</div>
-                                    <div class="user-details">
-                                        <span class="user-name">Nimal Perera</span>
-                                        <span class="user-email">nimal.p@email.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="role-badge role-student">Student</span></td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td>Nov 18, 2025</td>
-                            <td>3 hours ago</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action btn-view" onclick="viewUser(3)" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action btn-approve" onclick="approveUser(3)" title="Approve">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete" onclick="deleteUser(3)" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#U004</td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar" style="background-color: #6F42C1;">SF</div>
-                                    <div class="user-details">
-                                        <span class="user-name">Sanjana Fernando</span>
-                                        <span class="user-email">sanjana.f@email.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="role-badge role-student">Student</span></td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td><span class="status-badge status-verified">Verified</span></td>
-                            <td>Nov 01, 2025</td>
-                            <td>5 hours ago</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action btn-view" onclick="viewUser(4)" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action btn-suspend" onclick="suspendUser(4)" title="Suspend">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete" onclick="deleteUser(4)" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#U005</td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar" style="background-color: #DC3545;">DM</div>
-                                    <div class="user-details">
-                                        <span class="user-name">Digital Marketing Hub</span>
-                                        <span class="user-email">contact@digitalmarketing.lk</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="role-badge role-employer">Employer</span></td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td>Nov 19, 2025</td>
-                            <td>1 hour ago</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action btn-view" onclick="viewUser(5)" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action btn-approve" onclick="approveUser(5)" title="Approve">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete" onclick="deleteUser(5)" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#U006</td>
-                            <td>
-                                <div class="user-info">
-                                    <div class="user-avatar" style="background-color: #17A2B8;">KJ</div>
-                                    <div class="user-details">
-                                        <span class="user-name">Kasun Jayawardena</span>
-                                        <span class="user-email">kasun.j@email.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="role-badge role-student">Student</span></td>
-                            <td><span class="status-badge status-suspended">Suspended</span></td>
-                            <td><span class="status-badge status-verified">Verified</span></td>
-                            <td>Sep 28, 2025</td>
-                            <td>2 weeks ago</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action btn-view" onclick="viewUser(6)" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action btn-approve" onclick="reactivateUser(6)" title="Reactivate">
-                                        <i class="fas fa-undo"></i>
-                                    </button>
-                                    <button class="btn-action btn-delete" onclick="deleteUser(6)" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 40px;">
+                                    <i class="fas fa-users" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                                    <p style="color: #666; margin: 0;">No users found matching your criteria.</p>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
 
                 <!-- Pagination -->
                 <div class="pagination">
                     <div class="pagination-info">
-                        Showing 1 to 6 of 156 users
+                        Showing <?php echo ($offset + 1); ?> to <?php echo min($offset + $per_page, $total_users); ?> of <?php echo $total_users; ?> users
                     </div>
                     <div class="pagination-buttons">
-                        <button class="page-btn" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="page-btn active">1</button>
-                        <button class="page-btn">2</button>
-                        <button class="page-btn">3</button>
-                        <button class="page-btn">4</button>
-                        <button class="page-btn">5</button>
-                        <button class="page-btn">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                        <?php if ($page > 1): ?>
+                            <a href="?page=<?php echo ($page - 1); ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $role_filter ? '&role=' . urlencode($role_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?><?php echo $verified_filter ? '&verified=' . urlencode($verified_filter) : ''; ?>" class="page-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        <?php else: ?>
+                            <button class="page-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                        <?php endif; ?>
+
+                        <?php
+                        $start_page = max(1, $page - 2);
+                        $end_page = min($total_pages, $page + 2);
+
+                        for ($i = $start_page; $i <= $end_page; $i++):
+                        ?>
+                            <a href="?page=<?php echo $i; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $role_filter ? '&role=' . urlencode($role_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?><?php echo $verified_filter ? '&verified=' . urlencode($verified_filter) : ''; ?>" class="page-btn <?php echo ($i == $page) ? 'active' : ''; ?>">
+                                <?php echo $i; ?>
+                            </a>
+                        <?php endfor; ?>
+
+                        <?php if ($page < $total_pages): ?>
+                            <a href="?page=<?php echo ($page + 1); ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $role_filter ? '&role=' . urlencode($role_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?><?php echo $verified_filter ? '&verified=' . urlencode($verified_filter) : ''; ?>" class="page-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        <?php else: ?>
+                            <button class="page-btn" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Hidden Forms for Actions -->
+    <form id="approveForm" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="approve">
+        <input type="hidden" name="user_id" id="approveUserId">
+    </form>
+
+    <form id="suspendForm" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="suspend">
+        <input type="hidden" name="user_id" id="suspendUserId">
+    </form>
+
+    <form id="deleteForm" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="user_id" id="deleteUserId">
+    </form>
 
     <!-- View User Details Modal -->
     <div class="modal" id="viewUserModal">
@@ -643,9 +769,8 @@ include __DIR__ . '/../includes/header.php';
 
         // Confirm approve
         function confirmApprove() {
-            showAlert('success', 'User approved successfully!');
-            closeModal('approveUserModal');
-            // In actual implementation: send AJAX request
+            document.getElementById('approveUserId').value = currentUserId;
+            document.getElementById('approveForm').submit();
         }
 
         // Confirm suspend
@@ -654,70 +779,44 @@ include __DIR__ . '/../includes/header.php';
             const duration = document.getElementById('suspendDuration').value;
             
             if (!reason.trim()) {
-                showAlert('error', 'Please provide a reason for suspension.');
+                alert('Please provide a reason for suspension.');
                 return;
             }
             
-            showAlert('success', 'User has been suspended.');
+            // For now, just show not implemented
+            alert('Suspend functionality not yet implemented.');
             closeModal('suspendUserModal');
-            // In actual implementation: send AJAX request with reason and duration
         }
 
         // Confirm delete
         function confirmDelete() {
-            showAlert('success', 'User deleted permanently.');
-            closeModal('deleteUserModal');
-            // In actual implementation: send AJAX request to delete user
+            document.getElementById('deleteUserId').value = currentUserId;
+            document.getElementById('deleteForm').submit();
         }
 
         // Confirm reactivate
         function confirmReactivate() {
-            showAlert('success', 'User account reactivated successfully!');
+            // For now, just show not implemented
+            alert('Reactivate functionality not yet implemented.');
             closeModal('reactivateUserModal');
-            // In actual implementation: send AJAX request
         }
 
-        // Show alert
-        function showAlert(type, message) {
-            const alertId = type === 'success' ? 'successAlert' : 'errorAlert';
-            const messageId = type === 'success' ? 'successMessage' : 'errorMessage';
-            
-            document.getElementById(messageId).textContent = message;
-            document.getElementById(alertId).classList.add('show');
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            setTimeout(() => {
-                document.getElementById(alertId).classList.remove('show');
-            }, 5000);
-        }
 
-        // Apply filters
+
+        // Apply filters - now handled by form submission
         function applyFilters() {
-            const search = document.getElementById('searchUser').value.toLowerCase();
-            const role = document.getElementById('filterRole').value;
-            const status = document.getElementById('filterStatus').value;
-            const verified = document.getElementById('filterVerified').value;
-            
-            // In actual implementation: filter table rows or make AJAX request
-            showAlert('success', 'Filters applied successfully!');
+            // Filters are now applied via form submission
         }
 
-        // Reset filters
+        // Reset filters - now handled by link
         function resetFilters() {
-            document.getElementById('searchUser').value = '';
-            document.getElementById('filterRole').value = '';
-            document.getElementById('filterStatus').value = '';
-            document.getElementById('filterVerified').value = '';
-            
-            // In actual implementation: reload all users
-            showAlert('success', 'Filters reset.');
+            // Reset is now handled by link to current page without parameters
         }
 
         // Export data
         function exportData() {
             // In actual implementation: generate and download CSV file
-            showAlert('success', 'Exporting data to CSV...');
+            alert('Export functionality not yet implemented.');
         }
 
         // Edit user
@@ -737,18 +836,7 @@ include __DIR__ . '/../includes/header.php';
             });
         });
 
-        // Pagination buttons
-        document.querySelectorAll('.page-btn').forEach((btn, index) => {
-            btn.addEventListener('click', function() {
-                if (!this.disabled && !this.classList.contains('active')) {
-                    document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
-                    if (this.textContent.trim() && !isNaN(this.textContent.trim())) {
-                        this.classList.add('active');
-                    }
-                    // In actual implementation: load the corresponding page data
-                }
-            });
-        });
+
 
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
