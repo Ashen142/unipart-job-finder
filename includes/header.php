@@ -10,6 +10,17 @@ $page_title = $page_title ?? "UniPart - Part-Time Job Finder";
 
 // Site root used for root-relative asset URLs
 $rootFolder = '/Unipart-job-finder';
+// Define BASE_URL for backward compatibility with templates that use it
+if (!defined('BASE_URL')) {
+    // Ensure trailing slash so concatenation works: BASE_URL + 'jobs/...'
+    define('BASE_URL', rtrim($rootFolder, '/') . '/');
+}
+
+// Optional override to force the displayed success rate (percentage 0-100).
+// Set to an integer to override (e.g., 50), or leave undefined/null to use the live calculation.
+if (!defined('FORCE_SUCCESS_RATE')) {
+    define('FORCE_SUCCESS_RATE', 50); // <-- change this value or set to null to disable
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
