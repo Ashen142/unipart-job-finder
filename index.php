@@ -5,7 +5,95 @@ include __DIR__ . '/includes/functions.php';
 
 // Page settings
 $page_title = "Home - UniPart";
-$extraCSS = ["assets/css/index.css"];
+// Use root-relative path so the stylesheet loads from any page
+$extraCSS = ["/Unipart-job-finder/assets/css/index.css"];
+
+// Fetch featured jobs from database
+$featuredJobsQuery = "SELECT j.*, e.company_name, e.logo, e.industry 
+                      FROM jobs j 
+                      JOIN employers e ON j.employer_id = e.employer_id 
+                      WHERE j.status = 'Active' 
+                      ORDER BY j.posted_at DESC 
+                      LIMIT 6";
+$featuredJobsResult = $conn->query($featuredJobsQuery);
+$featuredJobs = $featuredJobsResult->fetch_all(MYSQLI_ASSOC);
+
+// Get statistics for the about section
+$statsQuery = "SELECT 
+                (SELECT COUNT(*) FROM users WHERE role = 'Student') as total_students,
+                (SELECT COUNT(*) FROM employers) as total_employers,
+                (SELECT COUNT(*) FROM jobs WHERE status = 'Active') as total_jobs";
+$statsResult = $conn->query($statsQuery);
+$stats = $statsResult ? $statsResult->fetch_assoc() : null;
+// Ensure defaults to avoid notices and provide safe integers
+if (empty($stats) || !is_array($stats)) {
+    $stats = [
+        'total_students' => 0,
+        'total_employers' => 0,
+        'total_jobs' => 0
+    ];
+} else {
+    $stats['total_students'] = intval($stats['total_students']);
+    $stats['total_employers'] = intval($stats['total_employers']);
+    $stats['total_jobs'] = intval($stats['total_jobs']);
+}
+
+// Calculate success rate: prefer accepted / (accepted + rejected), else accepted / total, default 0
+$successQuery = "SELECT 
+                 COUNT(*) as total_apps,
+                 SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) as accepted_apps,
+                 SUM(CASE WHEN status = 'Rejected' THEN 1 ELSE 0 END) as rejected_apps
+                 FROM applications";
+$successResult = $conn->query($successQuery);
+$successData = $successResult ? $successResult->fetch_assoc() : ['total_apps' => 0, 'accepted_apps' => 0, 'rejected_apps' => 0];
+
+$totalApps = intval($successData['total_apps'] ?? 0);
+$acceptedApps = intval($successData['accepted_apps'] ?? 0);
+$rejectedApps = intval($successData['rejected_apps'] ?? 0);
+
+if (($acceptedApps + $rejectedApps) > 0) {
+    // Use decided applications (accepted + rejected) when available
+    $successRate = (int) round(($acceptedApps / ($acceptedApps + $rejectedApps)) * 100);
+} elseif ($totalApps > 0) {
+    // Fallback to accepted / total if no decisions recorded
+    $successRate = (int) round(($acceptedApps / $totalApps) * 100);
+} else {
+    // No data yet
+    $successRate = 0;
+}
+
+// Allow forcing the displayed success rate from a central config constant for testing or demonstration
+if (defined('FORCE_SUCCESS_RATE') && FORCE_SUCCESS_RATE !== null) {
+    $successRate = (int) FORCE_SUCCESS_RATE;
+}
+
+// Get job categories with counts
+$categoriesQuery = "SELECT 
+                    category,
+                    COUNT(*) as job_count
+                    FROM jobs 
+                    WHERE status = 'Active' AND category IS NOT NULL
+                    GROUP BY category
+                    ORDER BY job_count DESC";
+$categoriesResult = $conn->query($categoriesQuery);
+$categories = $categoriesResult->fetch_all(MYSQLI_ASSOC);
+
+// Define category icons
+$categoryIcons = [
+    'Technology & IT' => '💻',
+    'Digital Marketing' => '📱',
+    'Content Writing' => '✏️',
+    'Graphic Design' => '🎨',
+    'Tutoring' => '🧑‍🏫',
+    'Retail & Sales' => '🛍️',
+    'Data Entry' => '📊',
+    'Customer Service' => '📞',
+    'Media & Video' => '🎬',
+    'Research Assistant' => '🔬',
+    'Fitness & Health' => '🏋️',
+    'Online Jobs' => '🌐'
+];
+
 
 // Include header
 include __DIR__ . '/includes/header.php';
@@ -108,77 +196,51 @@ include __DIR__ . '/includes/header.php';
         <p class="section-subtitle scroll-reveal">Find opportunities in your area of interest</p>
         
         <div class="categories-grid">
-            <div class="category-card scroll-reveal" data-delay="0">
-                <div class="category-icon">💻</div>
-                <h3 class="category-title">Technology & IT</h3>
-                <p class="category-count">150+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="50">
-                <div class="category-icon">📱</div>
-                <h3 class="category-title">Digital Marketing</h3>
-                <p class="category-count">120+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="100">
-                <div class="category-icon">✏️</div>
-                <h3 class="category-title">Content Writing</h3>
-                <p class="category-count">95+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="150">
-                <div class="category-icon">🎨</div>
-                <h3 class="category-title">Graphic Design</h3>
-                <p class="category-count">80+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="200">
-                <div class="category-icon">🧑‍🏫</div>
-                <h3 class="category-title">Tutoring</h3>
-                <p class="category-count">110+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="250">
-                <div class="category-icon">🛍️</div>
-                <h3 class="category-title">Retail & Sales</h3>
-                <p class="category-count">140+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="300">
-                <div class="category-icon">📊</div>
-                <h3 class="category-title">Data Entry</h3>
-                <p class="category-count">75+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="350">
-                <div class="category-icon">📞</div>
-                <h3 class="category-title">Customer Service</h3>
-                <p class="category-count">105+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="400">
-                <div class="category-icon">🎬</div>
-                <h3 class="category-title">Media & Video</h3>
-                <p class="category-count">60+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="450">
-                <div class="category-icon">🔬</div>
-                <h3 class="category-title">Research Assistant</h3>
-                <p class="category-count">45+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="500">
-                <div class="category-icon">🏋️</div>
-                <h3 class="category-title">Fitness & Health</h3>
-                <p class="category-count">55+ jobs</p>
-            </div>
-
-            <div class="category-card scroll-reveal" data-delay="550">
-                <div class="category-icon">🌐</div>
-                <h3 class="category-title">Online Jobs</h3>
-                <p class="category-count">200+ jobs</p>
-            </div>
+            <?php 
+            $delay = 0;
+            
+            // If we have categories from database, display them
+            if (!empty($categories)) {
+                foreach ($categories as $cat) {
+                    $icon = $categoryIcons[$cat['category']] ?? '💻' ;
+                    ?>
+                    <a href="<?php echo BASE_URL; ?>jobs/view-jobs.php?category=<?php echo urlencode($cat['category']); ?>" class="category-card scroll-reveal" data-delay="<?php echo $delay; ?>">
+                        <div class="category-icon"><?php echo $icon; ?></div>
+                        <h3 class="category-title"><?php echo htmlspecialchars($cat['category']); ?></h3>
+                        <p class="category-count"><?php echo $cat['job_count']; ?>+ jobs</p>
+                    </a>
+                    <?php
+                    $delay += 50;
+                }
+            } else {
+                // Default categories if database is empty
+                $defaultCategories = [
+                    ['name' => 'Technology & IT', 'icon' => '💻', 'count' => 0],
+                    ['name' => 'Digital Marketing', 'icon' => '📱', 'count' => 0],
+                    ['name' => 'Content Writing', 'icon' => '✏️', 'count' => 0],
+                    ['name' => 'Graphic Design', 'icon' => '🎨', 'count' => 0],
+                    ['name' => 'Tutoring', 'icon' => '🧑‍🏫', 'count' => 0],
+                    ['name' => 'Retail & Sales', 'icon' => '🛍️', 'count' => 0],
+                    ['name' => 'Data Entry', 'icon' => '📊', 'count' => 0],
+                    ['name' => 'Customer Service', 'icon' => '📞', 'count' => 0],
+                    ['name' => 'Media & Video', 'icon' => '🎬', 'count' => 0],
+                    ['name' => 'Research Assistant', 'icon' => '🔬', 'count' => 0],
+                    ['name' => 'Fitness & Health', 'icon' => '🏋️', 'count' => 0],
+                    ['name' => 'Online Jobs', 'icon' => '🌐', 'count' => 0]
+                ];
+                
+                foreach ($defaultCategories as $cat) {
+                    ?>
+                    <a href="<?php echo BASE_URL; ?>jobs/view-jobs.php?category=<?php echo urlencode($cat['name']); ?>" class="category-card scroll-reveal" data-delay="<?php echo $delay; ?>">
+                        <div class="category-icon"><?php echo $cat['icon']; ?></div>
+                        <h3 class="category-title"><?php echo $cat['name']; ?></h3>
+                        <p class="category-count"><?php echo $cat['count']; ?> jobs</p>
+                    </a>
+                    <?php
+                    $delay += 50;
+                }
+            }
+            ?>
         </div>
     </div>
 </section>
@@ -190,123 +252,73 @@ include __DIR__ . '/includes/header.php';
         <p class="section-subtitle scroll-reveal">Handpicked jobs from top employers</p>
         
         <div class="job-cards">
-            <!-- Job Card 1 -->
-            <div class="job-card scroll-reveal" data-delay="0">
-                <div class="job-card-header">
-                    <div class="job-icon">🌐</div>
-                    <div class="salary-badge">$</div>
-                </div>
-                <h3 class="job-title">Part-Time Web Developer</h3>
-                <p class="job-info"><i class="fa fa-building"></i> ABC Software Pvt Ltd</p>
-                <p class="job-info"><i class="fa fa-map-marker-alt"></i> Colombo</p>
-                <p class="job-info"><i class="fa fa-clock"></i> 15-20 hrs/week</p>
-                <p class="job-description">Looking for a skilled web developer to work on client projects using modern frameworks.</p>
-                <div class="job-tags">
-                    <span class="job-tag">React</span>
-                    <span class="job-tag">PHP</span>
-                    <span class="job-tag">Remote</span>
-                </div>
-                <a href="jobs/job-details.php?id=1" class="view-details-btn">View Details</a>
-            </div>
-
-            <!-- Job Card 2 -->
-            <div class="job-card scroll-reveal" data-delay="100">
-                <div class="job-card-header">
-                    <div class="job-icon">💼</div>
-                    <div class="salary-badge">$</div>
-                </div>
-                <h3 class="job-title">Marketing Intern</h3>
-                <p class="job-info"><i class="fa fa-building"></i> XYZ Marketing Agency</p>
-                <p class="job-info"><i class="fa fa-map-marker-alt"></i> Kandy</p>
-                <p class="job-info"><i class="fa fa-clock"></i> 20 hrs/week</p>
-                <p class="job-description">Join our team to learn digital marketing strategies and social media management.</p>
-                <div class="job-tags">
-                    <span class="job-tag">Social Media</span>
-                    <span class="job-tag">SEO</span>
-                    <span class="job-tag">Flexible</span>
-                </div>
-                <a href="jobs/job-details.php?id=2" class="view-details-btn">View Details</a>
-            </div>
-
-            <!-- Job Card 3 -->
-            <div class="job-card scroll-reveal" data-delay="200">
-                <div class="job-card-header">
-                    <div class="job-icon">🛍️</div>
-                    <div class="salary-badge">$</div>
-                </div>
-                <h3 class="job-title">Retail Sales Associate</h3>
-                <p class="job-info"><i class="fa fa-building"></i> Sunrise Mall</p>
-                <p class="job-info"><i class="fa fa-map-marker-alt"></i> Galle</p>
-                <p class="job-info"><i class="fa fa-clock"></i> 12-15 hrs/week</p>
-                <p class="job-description">Friendly and enthusiastic individuals needed for customer service and sales.</p>
-                <div class="job-tags">
-                    <span class="job-tag">Weekends</span>
-                    <span class="job-tag">Commission</span>
-                    <span class="job-tag">Training</span>
-                </div>
-                <a href="jobs/job-details.php?id=3" class="view-details-btn">View Details</a>
-            </div>
-
-            <!-- Job Card 4 -->
-            <div class="job-card scroll-reveal" data-delay="300">
-                <div class="job-card-header">
-                    <div class="job-icon">🧑‍🏫</div>
-                    <div class="salary-badge">$</div>
-                </div>
-                <h3 class="job-title">Online Tutor - Mathematics</h3>
-                <p class="job-info"><i class="fa fa-building"></i> EduHub Online</p>
-                <p class="job-info"><i class="fa fa-map-marker-alt"></i> Remote</p>
-                <p class="job-info"><i class="fa fa-clock"></i> Flexible hours</p>
-                <p class="job-description">Help O/L and A/L students excel in mathematics through online tutoring sessions.</p>
-                <div class="job-tags">
-                    <span class="job-tag">Online</span>
-                    <span class="job-tag">Flexible</span>
-                    <span class="job-tag">High Pay</span>
-                </div>
-                <a href="jobs/job-details.php?id=4" class="view-details-btn">View Details</a>
-            </div>
-
-            <!-- Job Card 5 -->
-            <div class="job-card scroll-reveal" data-delay="400">
-                <div class="job-card-header">
-                    <div class="job-icon">🎨</div>
-                    <div class="salary-badge">$</div>
-                </div>
-                <h3 class="job-title">Graphic Designer</h3>
-                <p class="job-info"><i class="fa fa-building"></i> Creative Studio LK</p>
-                <p class="job-info"><i class="fa fa-map-marker-alt"></i> Colombo</p>
-                <p class="job-info"><i class="fa fa-clock"></i> 10-15 hrs/week</p>
-                <p class="job-description">Design social media graphics, posters, and marketing materials for various clients.</p>
-                <div class="job-tags">
-                    <span class="job-tag">Photoshop</span>
-                    <span class="job-tag">Illustrator</span>
-                    <span class="job-tag">Portfolio</span>
-                </div>
-                <a href="jobs/job-details.php?id=5" class="view-details-btn">View Details</a>
-            </div>
-
-            <!-- Job Card 6 -->
-            <div class="job-card scroll-reveal" data-delay="500">
-                <div class="job-card-header">
-                    <div class="job-icon">✏️</div>
-                    <div class="salary-badge">$</div>
-                </div>
-                <h3 class="job-title">Content Writer</h3>
-                <p class="job-info"><i class="fa fa-building"></i> BlogWorks Media</p>
-                <p class="job-info"><i class="fa fa-map-marker-alt"></i> Remote</p>
-                <p class="job-info"><i class="fa fa-clock"></i> 8-12 hrs/week</p>
-                <p class="job-description">Write engaging blog posts and articles on various topics for our clients.</p>
-                <div class="job-tags">
-                    <span class="job-tag">Remote</span>
-                    <span class="job-tag">Writing</span>
-                    <span class="job-tag">Research</span>
-                </div>
-                <a href="jobs/job-details.php?id=6" class="view-details-btn">View Details</a>
-            </div>
+            <?php 
+            if (!empty($featuredJobs)) {
+                $delay = 0;
+                foreach ($featuredJobs as $job) {
+                    // Determine icon based on category
+                    $jobIcon = '💼';
+                    if (stripos($job['category'], 'technology') !== false || stripos($job['category'], 'IT') !== false) {
+                        $jobIcon = '💻';
+                    } elseif (stripos($job['category'], 'design') !== false) {
+                        $jobIcon = '🎨';
+                    } elseif (stripos($job['category'], 'marketing') !== false) {
+                        $jobIcon = '📱';
+                    } elseif (stripos($job['category'], 'writing') !== false) {
+                        $jobIcon = '✏️';
+                    } elseif (stripos($job['category'], 'tutoring') !== false || stripos($job['category'], 'education') !== false) {
+                        $jobIcon = '🧑‍🏫';
+                    } elseif (stripos($job['category'], 'retail') !== false || stripos($job['category'], 'sales') !== false) {
+                        $jobIcon = '🛍️';
+                    }
+                    
+                    // Extract skills/requirements for tags
+                    $tags = [];
+                    if (!empty($job['requirements'])) {
+                        $reqLines = explode(',', $job['requirements']);
+                        $tags = array_slice(array_map('trim', $reqLines), 0, 3);
+                    }
+                    if (empty($tags) && !empty($job['type'])) {
+                        $tags[] = $job['type'];
+                    }
+                    ?>
+                    <div class="job-card scroll-reveal" data-delay="<?php echo $delay; ?>">
+                        <div class="job-card-header">
+                            <div class="job-icon"><?php echo $jobIcon; ?></div>
+                            <div class="salary-badge">$</div>
+                        </div>
+                        <h3 class="job-title"><?php echo htmlspecialchars($job['title']); ?></h3>
+                        <p class="job-info"><i class="fa fa-building"></i> <?php echo htmlspecialchars($job['company_name']); ?></p>
+                        <p class="job-info"><i class="fa fa-map-marker-alt"></i> <?php echo htmlspecialchars($job['location']); ?></p>
+                        <?php if (!empty($job['type'])): ?>
+                            <p class="job-info"><i class="fa fa-clock"></i> <?php echo htmlspecialchars($job['type']); ?></p>
+                        <?php endif; ?>
+                        <p class="job-description">
+                            <?php 
+                            $description = strip_tags($job['description']);
+                            echo htmlspecialchars(substr($description, 0, 120)) . (strlen($description) > 120 ? '...' : ''); 
+                            ?>
+                        </p>
+                        <?php if (!empty($tags)): ?>
+                            <div class="job-tags">
+                                <?php foreach ($tags as $tag): ?>
+                                    <span class="job-tag"><?php echo htmlspecialchars($tag); ?></span>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <a href="<?php echo BASE_URL; ?>jobs/job-details.php?job_id=<?php echo $job['job_id']; ?>" class="view-details-btn">View Details</a>
+                    </div>
+                    <?php
+                    $delay += 100;
+                }
+            } else {
+                echo '<p class="text-center" style="grid-column: 1/-1; color: #6c757d; font-size: 1.1rem;">No jobs available at the moment. Check back soon!</p>';
+            }
+            ?>
         </div>
 
         <div class="browse-all scroll-reveal">
-            <a href="jobs/view-jobs.php" class="browse-all-btn">Browse All Jobs</a>
+            <a href="<?php echo BASE_URL; ?>jobs/view-jobs.php" class="browse-all-btn">Browse All Jobs</a>
         </div>
     </div>
 </section>
@@ -325,19 +337,19 @@ include __DIR__ . '/includes/header.php';
                 </p>
                 <div class="about-stats">
                     <div class="stat-item scroll-reveal" data-delay="0">
-                        <h3 class="stat-number counter" data-target="5000">0</h3>
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_students'] ?? 0) ?>">0</h3>
                         <p class="stat-label">Active Students</p>
                     </div>
                     <div class="stat-item scroll-reveal" data-delay="100">
-                        <h3 class="stat-number counter" data-target="1200">0</h3>
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_employers'] ?? 0) ?>">0</h3>
                         <p class="stat-label">Employers</p>
                     </div>
                     <div class="stat-item scroll-reveal" data-delay="200">
-                        <h3 class="stat-number counter" data-target="3500">0</h3>
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_jobs'] ?? 0) ?>">0</h3>
                         <p class="stat-label">Jobs Posted</p>
                     </div>
                     <div class="stat-item scroll-reveal" data-delay="300">
-                        <h3 class="stat-number"><span class="counter" data-target="95">0</span>%</h3>
+                        <h3 class="stat-number"><span class="counter" data-target="<?= htmlspecialchars($successRate ?? 95) ?>">0</span>%</h3>
                         <p class="stat-label">Success Rate</p>
                     </div>
                 </div>
@@ -441,8 +453,8 @@ include __DIR__ . '/includes/header.php';
             <h2 class="cta-title scroll-reveal">Ready to Start Your Journey?</h2>
             <p class="cta-description scroll-reveal">Join thousands of students who are already earning while learning on UniPart</p>
             <div class="cta-buttons scroll-reveal">
-                <a href="auth/register.php" class="cta-btn primary-cta">Get Started Now</a>
-                <a href="jobs/view-jobs.php" class="cta-btn secondary-cta">Browse Jobs</a>
+                <a href="<?php echo BASE_URL; ?>auth/register.php" class="cta-btn primary-cta">Get Started Now</a>
+                <a href="<?php echo BASE_URL; ?>jobs/view-jobs.php" class="cta-btn secondary-cta">Browse Jobs</a>
             </div>
         </div>
     </div>
