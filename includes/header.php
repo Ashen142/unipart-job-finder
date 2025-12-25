@@ -40,13 +40,18 @@ $rootFolder = '/Unipart-job-finder';
     <?php
     if (isset($extraCSS) && is_array($extraCSS)) {
         foreach ($extraCSS as $cssFile) {
-            $cssUrl = $cssFile;
-            if (strpos($cssFile, '/') === 0) {
-                $cssFilePath = $_SERVER['DOCUMENT_ROOT'] . $cssFile;
-                if (file_exists($cssFilePath)) {
-                    $cssUrl .= '?v=' . filemtime($cssFilePath);
-                }
+            // Ensure root-relative path so it works from any folder
+            if (strpos($cssFile, '/') !== 0) {
+                $cssFile = rtrim($rootFolder, '/') . '/' . ltrim($cssFile, '/');
             }
+
+            $cssUrl = $cssFile;
+            $cssFilePath = $_SERVER['DOCUMENT_ROOT'] . $cssFile;
+            if (file_exists($cssFilePath)) {
+                // Append filemtime for cache-busting
+                $cssUrl .= '?v=' . filemtime($cssFilePath);
+            }
+
             echo '<link rel="stylesheet" href="' . htmlspecialchars($cssUrl) . '">' . PHP_EOL;
         }
     }
