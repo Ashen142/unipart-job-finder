@@ -13,14 +13,80 @@ $page_type = 'student';
 // Include header
 include __DIR__ . '/../includes/header.php';
 
-// ==================== FETCH JOBS FROM DATABASE ====================
+// ==================== FETCH JOBS FROM DATABASE (with filters) ====================
+// Prepare dynamic filters based on GET parameters: category, keywords, location, type, salary
+$where = ["jobs.status = 'active'"];
+$params = [];
+$types = '';
+
+// Category (allow full name from links) - use case-insensitive partial match for robustness
+if (!empty($_GET['category'])) {
+    $category = trim($_GET['category']);
+    $where[] = 'jobs.category LIKE ?';
+    $types .= 's';
+    $params[] = "%$category%";
+}
+
+// Keywords - search title, description or company name
+if (!empty($_GET['keywords'])) {
+    $kw = trim($_GET['keywords']);
+    $like = "%" . $kw . "%";
+    $where[] = '(jobs.title LIKE ? OR jobs.description LIKE ? OR employers.company_name LIKE ?)';
+    $types .= 'sss';
+    $params[] = $like;
+    $params[] = $like;
+    $params[] = $like;
+}
+
+// Location (partial match)
+if (!empty($_GET['location'])) {
+    $loc = trim($_GET['location']);
+    $where[] = 'jobs.location LIKE ?';
+    $types .= 's';
+    $params[] = "%$loc%";
+}
+
+// Type (exact match)
+if (!empty($_GET['type'])) {
+    $typeFilter = trim($_GET['type']);
+    $where[] = 'jobs.type = ?';
+    $types .= 's';
+    $params[] = $typeFilter;
+}
+
+// Salary range (basic handling)
+if (!empty($_GET['salary'])) {
+    $salary = $_GET['salary'];
+    if ($salary === '0-10') { $where[] = 'jobs.pay < 10'; }
+    elseif ($salary === '10-20') { $where[] = 'jobs.pay BETWEEN 10 AND 20'; }
+    elseif ($salary === '20-30') { $where[] = 'jobs.pay BETWEEN 20 AND 30'; }
+    elseif ($salary === '30+') { $where[] = 'jobs.pay > 30'; }
+}
+
 $sql = "SELECT jobs.*, employers.company_name 
         FROM jobs 
         JOIN employers ON jobs.employer_id = employers.employer_id
-        WHERE jobs.status = 'active'
+        WHERE " . implode(' AND ', $where) . "
         ORDER BY jobs.created_at DESC";
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+if ($stmt === false) {
+    die('Prepare failed: ' . htmlspecialchars($conn->error));
+}
+
+// Bind params dynamically if present
+if (!empty($params)) {
+    // bind_param requires references
+    $bind_names = [];
+    $bind_names[] = $types;
+    for ($i = 0; $i < count($params); $i++) {
+        $bind_names[] = & $params[$i];
+    }
+    call_user_func_array([$stmt, 'bind_param'], $bind_names);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Time Ago Function
 function timeAgoJobs($dateTime) {
@@ -48,74 +114,60 @@ function timeAgoJobs($dateTime) {
         <aside class="filter-sidebar">
             <h3><i class="fas fa-filter"></i> Filters</h3>
             
+            <!-- Use GET form so filters are server-side and bookmarkable -->
+            <form method="GET" action="view-jobs.php" id="filter-form">
+
             <div class="filter-group">
                 <h4>Search Keywords</h4>
-                <input type="text" placeholder="e.g. Web Developer" id="keyword-search">
+                <input type="text" name="keywords" id="keyword-search" placeholder="e.g. Web Developer" value="<?= htmlspecialchars($_GET['keywords'] ?? '') ?>">
             </div>
 
             <div class="filter-group">
                 <h4>Job Type</h4>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="part-time">
-                        <label for="part-time">Part-Time</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="full-time">
-                        <label for="full-time">Full-Time</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="remote">
-                        <label for="remote">Remote</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="internship">
-                        <label for="internship">Internship</label>
-                    </div>
-                </div>
+                <select name="type" id="type-filter">
+                    <option value="">Any Type</option>
+                    <option value="Part-Time" <?= (isset($_GET['type']) && $_GET['type'] === 'Part-Time') ? 'selected' : '' ?>>Part-Time</option>
+                    <option value="Full-Time" <?= (isset($_GET['type']) && $_GET['type'] === 'Full-Time') ? 'selected' : '' ?>>Full-Time</option>
+                    <option value="Remote" <?= (isset($_GET['type']) && $_GET['type'] === 'Remote') ? 'selected' : '' ?>>Remote</option>
+                    <option value="Internship" <?= (isset($_GET['type']) && $_GET['type'] === 'Internship') ? 'selected' : '' ?>>Internship</option>
+                </select>
             </div>
 
             <div class="filter-group">
                 <h4>Category</h4>
-                <select id="category-filter">
+                <select name="category" id="category-filter">
                     <option value="">All Categories</option>
-                    <option value="it">IT & Development</option>
-                    <option value="design">Design & Creative</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="sales">Sales</option>
-                    <option value="writing">Writing & Content</option>
-                    <option value="customer">Customer Service</option>
-                    <option value="admin">Administrative</option>
-                    <option value="other">Other</option>
+                    <option value="Technology & IT" <?= (isset($_GET['category']) && $_GET['category'] === 'Technology & IT') ? 'selected' : '' ?>>IT & Development</option>
+                    <option value="Design & Creative" <?= (isset($_GET['category']) && $_GET['category'] === 'Design & Creative') ? 'selected' : '' ?>>Design & Creative</option>
+                    <option value="Marketing" <?= (isset($_GET['category']) && $_GET['category'] === 'Marketing') ? 'selected' : '' ?>>Marketing</option>
+                    <option value="Sales" <?= (isset($_GET['category']) && $_GET['category'] === 'Sales') ? 'selected' : '' ?>>Sales</option>
+                    <option value="Writing & Content" <?= (isset($_GET['category']) && $_GET['category'] === 'Writing & Content') ? 'selected' : '' ?>>Writing & Content</option>
+                    <option value="Customer Service" <?= (isset($_GET['category']) && $_GET['category'] === 'Customer Service') ? 'selected' : '' ?>>Customer Service</option>
+                    <option value="Administrative" <?= (isset($_GET['category']) && $_GET['category'] === 'Administrative') ? 'selected' : '' ?>>Administrative</option>
+                    <option value="Other" <?= (isset($_GET['category']) && $_GET['category'] === 'Other') ? 'selected' : '' ?>>Other</option>
                 </select>
             </div>
 
             <div class="filter-group">
                 <h4>Location</h4>
-                <select id="location-filter">
-                    <option value="">All Locations</option>
-                    <option value="remote">Remote</option>
-                    <option value="colombo">Colombo</option>
-                    <option value="kandy">Kandy</option>
-                    <option value="galle">Galle</option>
-                    <option value="negombo">Negombo</option>
-                    <option value="jaffna">Jaffna</option>
-                </select>
+                <input type="text" name="location" id="location-filter" placeholder="City or 'Remote'" value="<?= htmlspecialchars($_GET['location'] ?? '') ?>">
             </div>
 
             <div class="filter-group">
                 <h4>Salary Range</h4>
-                <select id="salary-filter">
+                <select name="salary" id="salary-filter">
                     <option value="">Any Salary</option>
-                    <option value="0-10">Below $10/hr</option>
-                    <option value="10-20">$10 - $20/hr</option>
-                    <option value="20-30">$20 - $30/hr</option>
-                    <option value="30+">Above $30/hr</option>
+                    <option value="0-10" <?= (isset($_GET['salary']) && $_GET['salary'] === '0-10') ? 'selected' : '' ?>>Below $10/hr</option>
+                    <option value="10-20" <?= (isset($_GET['salary']) && $_GET['salary'] === '10-20') ? 'selected' : '' ?>>$10 - $20/hr</option>
+                    <option value="20-30" <?= (isset($_GET['salary']) && $_GET['salary'] === '20-30') ? 'selected' : '' ?>>$20 - $30/hr</option>
+                    <option value="30+" <?= (isset($_GET['salary']) && $_GET['salary'] === '30+') ? 'selected' : '' ?>>Above $30/hr</option>
                 </select>
             </div>
 
-            <button class="filter-btn"><i class="fas fa-search"></i> Apply Filters</button>
-            <button class="clear-btn"><i class="fas fa-redo"></i> Clear All</button>
+            <button type="submit" class="filter-btn"><i class="fas fa-search"></i> Apply Filters</button>
+            <button type="button" class="clear-btn" id="clear-filters"><i class="fas fa-redo"></i> Clear All</button>
+
+            </form>
         </aside>
 
         <!-- Jobs Section -->
@@ -250,13 +302,21 @@ jobCards.forEach(card => {
 });
 
 // Clear filters
-document.querySelector('.clear-btn').addEventListener('click', function() {
-    document.getElementById('keyword-search').value = '';
-    document.getElementById('category-filter').value = '';
-    document.getElementById('location-filter').value = '';
-    document.getElementById('salary-filter').value = '';
-    document.querySelectorAll('.checkbox-item input').forEach(cb => cb.checked = false);
-    alert('All filters cleared!');
+document.getElementById('clear-filters').addEventListener('click', function() {
+    document.getElementById('filter-form').reset();
+    // Redirect to base page without query string
+    window.location.href = 'view-jobs.php';
+});
+
+// Pre-fill values from GET for usability (already handled by PHP rendering the inputs)
+// Make job cards clickable (preserve existing behavior)
+const jobCards = document.querySelectorAll('.job-card');
+jobCards.forEach(card => {
+    card.addEventListener('click', function(e) {
+        // Ignore clicks on buttons inside card
+        if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button') || e.target.tagName.toLowerCase() === 'a') return;
+        window.location.href = this.querySelector('.job-title').getAttribute('href');
+    });
 });
 </script>
 
