@@ -5,7 +5,7 @@ include __DIR__ . '/../includes/db_connect.php';
 include __DIR__ . '/../includes/functions.php';
 
 // Page settings
-$page_title = "admin-dashboard to UniPart";
+$page_title = "View Jobs - UniPart";
 $extraCSS = ['/Unipart-job-finder/assets/css/jobs.css'];
 $body_class = 'dashboard-page';
 $page_type = 'student';
