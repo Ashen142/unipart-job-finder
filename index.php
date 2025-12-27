@@ -115,6 +115,47 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<!-- About UniPart Section -->
+<section class="about-section">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text scroll-reveal">
+                <h2 class="section-title">About UniPart</h2>
+                <p class="about-description">
+                    UniPart is Sri Lanka's premier platform connecting university students with meaningful part-time employment opportunities. We understand the unique challenges students face in balancing academics with financial needs, and we're here to bridge that gap.
+                </p>
+                <p class="about-description">
+                    Founded in 2024, our mission is to empower students by providing them access to flexible, skill-building jobs that complement their education. Whether you're looking for remote work, weekend shifts, or internships that align with your field of study, UniPart is your trusted partner in career development.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-item scroll-reveal" data-delay="0">
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_students'] ?? 0) ?>">0</h3>
+                        <p class="stat-label"> 🎓 Active Students</p>
+                    </div>
+                    <div class="stat-item scroll-reveal" data-delay="100">
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_employers'] ?? 0) ?>">0</h3>
+                        <p class="stat-label"> 💼 Employers</p>
+                    </div>
+                    <div class="stat-item scroll-reveal" data-delay="200">
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_jobs'] ?? 0) ?>">0</h3>
+                        <p class="stat-label">📋 Jobs Posted</p>
+                    </div>
+                    <div class="stat-item scroll-reveal" data-delay="300">
+                        <h3 class="stat-number"><span class="counter" data-target="<?= htmlspecialchars($successRate ?? 95) ?>">0</span>%</h3>
+                        <p class="stat-label">✅ Success Rate</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image scroll-reveal" data-delay="200">
+                <img src="assets/images/about-illustration.svg" alt="About UniPart" onerror="this.style.display='none'">
+                <div class="about-placeholder">
+                    <i class="fa fa-users" style="font-size: 120px; color: #007BFF;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Get Started in Simple Steps Section -->
 <section class="steps-section">
     <div class="container">
@@ -323,46 +364,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!-- About UniPart Section -->
-<section class="about-section">
-    <div class="container">
-        <div class="about-content">
-            <div class="about-text scroll-reveal">
-                <h2 class="section-title">About UniPart</h2>
-                <p class="about-description">
-                    UniPart is Sri Lanka's premier platform connecting university students with meaningful part-time employment opportunities. We understand the unique challenges students face in balancing academics with financial needs, and we're here to bridge that gap.
-                </p>
-                <p class="about-description">
-                    Founded in 2024, our mission is to empower students by providing them access to flexible, skill-building jobs that complement their education. Whether you're looking for remote work, weekend shifts, or internships that align with your field of study, UniPart is your trusted partner in career development.
-                </p>
-                <div class="about-stats">
-                    <div class="stat-item scroll-reveal" data-delay="0">
-                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_students'] ?? 0) ?>">0</h3>
-                        <p class="stat-label">Active Students</p>
-                    </div>
-                    <div class="stat-item scroll-reveal" data-delay="100">
-                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_employers'] ?? 0) ?>">0</h3>
-                        <p class="stat-label">Employers</p>
-                    </div>
-                    <div class="stat-item scroll-reveal" data-delay="200">
-                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_jobs'] ?? 0) ?>">0</h3>
-                        <p class="stat-label">Jobs Posted</p>
-                    </div>
-                    <div class="stat-item scroll-reveal" data-delay="300">
-                        <h3 class="stat-number"><span class="counter" data-target="<?= htmlspecialchars($successRate ?? 95) ?>">0</span>%</h3>
-                        <p class="stat-label">Success Rate</p>
-                    </div>
-                </div>
-            </div>
-            <div class="about-image scroll-reveal" data-delay="200">
-                <img src="assets/images/about-illustration.svg" alt="About UniPart" onerror="this.style.display='none'">
-                <div class="about-placeholder">
-                    <i class="fa fa-users" style="font-size: 120px; color: #007BFF;"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- Platform Features Section -->
 <section class="features-section">
