@@ -115,6 +115,129 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<!-- About UniPart Section -->
+<section class="about-section">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text scroll-reveal">
+                <h2 class="section-title">About UniPart</h2>
+                <p class="about-description">
+                    UniPart is Sri Lanka's premier platform connecting university students with meaningful part-time employment opportunities. We understand the unique challenges students face in balancing academics with financial needs, and we're here to bridge that gap.
+                </p>
+                <p class="about-description">
+                    Founded in 2024, our mission is to empower students by providing them access to flexible, skill-building jobs that complement their education. Whether you're looking for remote work, weekend shifts, or internships that align with your field of study, UniPart is your trusted partner in career development.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-item scroll-reveal" data-delay="0">
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_students'] ?? 0) ?>">0</h3>
+                        <p class="stat-label">Active Students</p>
+                    </div>
+                    <div class="stat-item scroll-reveal" data-delay="100">
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_employers'] ?? 0) ?>">0</h3>
+                        <p class="stat-label">Employers</p>
+                    </div>
+                    <div class="stat-item scroll-reveal" data-delay="200">
+                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_jobs'] ?? 0) ?>">0</h3>
+                        <p class="stat-label">Jobs Posted</p>
+                    </div>
+                    <div class="stat-item scroll-reveal" data-delay="300">
+                        <h3 class="stat-number"><span class="counter" data-target="<?= htmlspecialchars($successRate ?? 95) ?>">0</span>%</h3>
+                        <p class="stat-label">Success Rate</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image scroll-reveal" data-delay="200">
+                <img src="assets/images/about-illustration.svg" alt="About UniPart" onerror="this.style.display='none'">
+                <div class="about-placeholder">
+                    <i class="fa fa-users" style="font-size: 120px; color: #007BFF;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Features Section -->
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title scroll-reveal">Our Platform Features</h2>
+        <p class="section-subtitle scroll-reveal">Everything you need for a seamless job search experience</p>
+        
+        <div class="features-grid">
+            <div class="feature-card scroll-reveal" data-delay="0">
+                <div class="feature-icon">🔒</div>
+                <h3 class="feature-title">Secure & Verified</h3>
+                <p class="feature-description">All employers are verified to ensure student safety. Your data is protected with industry-standard encryption.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="50">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Instant Applications</h3>
+                <p class="feature-description">Apply to multiple jobs with one click using your saved profile and resume. No repetitive form filling.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="100">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Application Tracking</h3>
+                <p class="feature-description">Monitor all your applications in one place. Get real-time updates on your application status.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="150">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Smart Matching</h3>
+                <p class="feature-description">Our algorithm matches you with jobs that fit your skills, schedule, and career goals.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="200">
+                <div class="feature-icon">💬</div>
+                <h3 class="feature-title">Direct Communication</h3>
+                <p class="feature-description">Chat directly with employers through our secure messaging system. Schedule interviews easily.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="250">
+                <div class="feature-icon">⭐</div>
+                <h3 class="feature-title">Ratings & Reviews</h3>
+                <p class="feature-description">Read reviews from other students and rate your experience to help the community.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="300">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">Mobile Friendly</h3>
+                <p class="feature-description">Access UniPart on any device. Search and apply for jobs on the go with our responsive design.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="350">
+                <div class="feature-icon">🔔</div>
+                <h3 class="feature-title">Smart Notifications</h3>
+                <p class="feature-description">Get instant alerts for new job postings that match your preferences and application updates.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="400">
+                <div class="feature-icon">📄</div>
+                <h3 class="feature-title">Resume Builder</h3>
+                <p class="feature-description">Create a professional resume using our built-in templates. Download and share anytime.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="450">
+                <div class="feature-icon">🎓</div>
+                <h3 class="feature-title">Student Focused</h3>
+                <p class="feature-description">All jobs are curated specifically for university students with flexible schedules and fair pay.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="500">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-title">Remote Options</h3>
+                <p class="feature-description">Access hundreds of remote and online job opportunities you can do from anywhere.</p>
+            </div>
+
+            <div class="feature-card scroll-reveal" data-delay="550">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">Career Growth</h3>
+                <p class="feature-description">Build your professional network and gain experience that launches your career.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Get Started in Simple Steps Section -->
 <section class="steps-section">
     <div class="container">
@@ -323,128 +446,7 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!-- About UniPart Section -->
-<section class="about-section">
-    <div class="container">
-        <div class="about-content">
-            <div class="about-text scroll-reveal">
-                <h2 class="section-title">About UniPart</h2>
-                <p class="about-description">
-                    UniPart is Sri Lanka's premier platform connecting university students with meaningful part-time employment opportunities. We understand the unique challenges students face in balancing academics with financial needs, and we're here to bridge that gap.
-                </p>
-                <p class="about-description">
-                    Founded in 2024, our mission is to empower students by providing them access to flexible, skill-building jobs that complement their education. Whether you're looking for remote work, weekend shifts, or internships that align with your field of study, UniPart is your trusted partner in career development.
-                </p>
-                <div class="about-stats">
-                    <div class="stat-item scroll-reveal" data-delay="0">
-                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_students'] ?? 0) ?>">0</h3>
-                        <p class="stat-label">Active Students</p>
-                    </div>
-                    <div class="stat-item scroll-reveal" data-delay="100">
-                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_employers'] ?? 0) ?>">0</h3>
-                        <p class="stat-label">Employers</p>
-                    </div>
-                    <div class="stat-item scroll-reveal" data-delay="200">
-                        <h3 class="stat-number counter" data-target="<?= htmlspecialchars($stats['total_jobs'] ?? 0) ?>">0</h3>
-                        <p class="stat-label">Jobs Posted</p>
-                    </div>
-                    <div class="stat-item scroll-reveal" data-delay="300">
-                        <h3 class="stat-number"><span class="counter" data-target="<?= htmlspecialchars($successRate ?? 95) ?>">0</span>%</h3>
-                        <p class="stat-label">Success Rate</p>
-                    </div>
-                </div>
-            </div>
-            <div class="about-image scroll-reveal" data-delay="200">
-                <img src="assets/images/about-illustration.svg" alt="About UniPart" onerror="this.style.display='none'">
-                <div class="about-placeholder">
-                    <i class="fa fa-users" style="font-size: 120px; color: #007BFF;"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Platform Features Section -->
-<section class="features-section">
-    <div class="container">
-        <h2 class="section-title scroll-reveal">Our Platform Features</h2>
-        <p class="section-subtitle scroll-reveal">Everything you need for a seamless job search experience</p>
-        
-        <div class="features-grid">
-            <div class="feature-card scroll-reveal" data-delay="0">
-                <div class="feature-icon">🔒</div>
-                <h3 class="feature-title">Secure & Verified</h3>
-                <p class="feature-description">All employers are verified to ensure student safety. Your data is protected with industry-standard encryption.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="50">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">Instant Applications</h3>
-                <p class="feature-description">Apply to multiple jobs with one click using your saved profile and resume. No repetitive form filling.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="100">
-                <div class="feature-icon">📊</div>
-                <h3 class="feature-title">Application Tracking</h3>
-                <p class="feature-description">Monitor all your applications in one place. Get real-time updates on your application status.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="150">
-                <div class="feature-icon">🎯</div>
-                <h3 class="feature-title">Smart Matching</h3>
-                <p class="feature-description">Our algorithm matches you with jobs that fit your skills, schedule, and career goals.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="200">
-                <div class="feature-icon">💬</div>
-                <h3 class="feature-title">Direct Communication</h3>
-                <p class="feature-description">Chat directly with employers through our secure messaging system. Schedule interviews easily.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="250">
-                <div class="feature-icon">⭐</div>
-                <h3 class="feature-title">Ratings & Reviews</h3>
-                <p class="feature-description">Read reviews from other students and rate your experience to help the community.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="300">
-                <div class="feature-icon">📱</div>
-                <h3 class="feature-title">Mobile Friendly</h3>
-                <p class="feature-description">Access UniPart on any device. Search and apply for jobs on the go with our responsive design.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="350">
-                <div class="feature-icon">🔔</div>
-                <h3 class="feature-title">Smart Notifications</h3>
-                <p class="feature-description">Get instant alerts for new job postings that match your preferences and application updates.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="400">
-                <div class="feature-icon">📄</div>
-                <h3 class="feature-title">Resume Builder</h3>
-                <p class="feature-description">Create a professional resume using our built-in templates. Download and share anytime.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="450">
-                <div class="feature-icon">🎓</div>
-                <h3 class="feature-title">Student Focused</h3>
-                <p class="feature-description">All jobs are curated specifically for university students with flexible schedules and fair pay.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="500">
-                <div class="feature-icon">🌍</div>
-                <h3 class="feature-title">Remote Options</h3>
-                <p class="feature-description">Access hundreds of remote and online job opportunities you can do from anywhere.</p>
-            </div>
-
-            <div class="feature-card scroll-reveal" data-delay="550">
-                <div class="feature-icon">📈</div>
-                <h3 class="feature-title">Career Growth</h3>
-                <p class="feature-description">Build your professional network and gain experience that launches your career.</p>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Call to Action Section -->
 <section class="cta-section">
