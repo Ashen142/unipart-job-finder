@@ -37,6 +37,15 @@
             transform: translateY(0);
         }
 
+        @keyframes parallaxFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -53,12 +62,28 @@
             opacity: 0;
         }
 
+        /* Gradient Text Animation */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
         .section-title {
             text-align: center;
             font-size: 2.5rem;
             font-weight: 700;
             color: #000000;
             margin-bottom: 3rem;
+            position: relative;
+    display: inline-block;
+    width: 100%;
         }
 
         .section-subtitle {
@@ -66,7 +91,32 @@
             font-size: 1.1rem;
             color: #6c757d;
             margin-bottom: 3rem;
+            
         }
+
+        /* Animated Underline for Titles */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #28a745);
+    border-radius: 2px;
+    animation: expandWidth 2s ease-in-out infinite;
+}
+
+@keyframes expandWidth {
+    0%, 100% {
+        width: 80px;
+    }
+    50% {
+        width: 120px;
+    }
+}
+
 
         .hero {
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -87,6 +137,8 @@
             background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
             animation: bgMove 20s linear infinite;
         }
+
+ 
 
         @keyframes bgMove{
             0% { transform: translate(0, 0); }
@@ -177,6 +229,7 @@
         .steps-section{
             padding: 5rem 2rem;
             background-color: white;
+            position: relative;
         }
 
         .steps-grid{
@@ -193,6 +246,7 @@
             position: relative;
             border: 2px solid transparent;
             transition: all 0.4s ease;
+            transform-style: preserve-3d;
         }
 
         .step-card.revealed{
@@ -201,14 +255,14 @@
 
         @keyframes cardPop {
             0% {
-                transform: scale(0.9);
+                transform: scale(0.9) rotateY(-10deg);
                 opacity: 0;
             }
             50% {
-                transform: scale(1.05);
+                transform: scale(1.05) rotateY(5deg);
             }
             100% {
-                transform: scale(1);
+                transform: scale(1) rotateY(0);
                 opacity: 1;
             }
         }
@@ -233,11 +287,14 @@
             font-weight: 700;
             font-size: 1.1rem;
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(0,123,255,0.5);
        }
 
        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0%, 100% { transform: scale(1);
+            box-shadow: 0 0 20px rgba(0,123,255,0.5); }
+            50% { transform: scale(1.1); 
+            box-shadow: 0 0 20px rgba(0,123,255,0.5);}
         }
 
         .step-icon {
@@ -245,7 +302,17 @@
             margin-bottom: 1rem;
             display: inline-block;
             transition: transform 0.3s ease;
+            animation: iconBounce 2s ease-in-out infinite;
         }
+
+        @keyframes iconBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
 
         .step-card:hover .step-icon {
             transform: rotateY(360deg);
@@ -386,6 +453,7 @@
 }
 
 /* Categories Section */
+/* Categories Section with 3D Tilt Effect */
 .categories-section {
     padding: 5rem 2rem;
     background-color: white;
@@ -405,12 +473,16 @@
     transition: all 0.4s ease;
     cursor: pointer;
     border: 2px solid transparent;
+    text-decoration: none;
+    display: block;
+    position: relative;
 }
 
+/* 3D Tilt Effect */
 .category-card:hover {
     background-color: white;
-    transform: translateY(-8px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transform: translateY(-8px) rotateX(5deg);
+    box-shadow: 0 15px 30px rgba(0,123,255,0.15);
     border-color: #007bff;
 }
 
@@ -418,11 +490,13 @@
     font-size: 3rem;
     margin-bottom: 1rem;
     display: inline-block;
-    transition: transform 0.3s ease;
+    transition: all 0.4s ease;
+    filter: grayscale(0.3);
 }
 
 .category-card:hover .category-icon {
-    transform: scale(1.2);
+    transform: scale(1.3) rotate(360deg);
+    filter: grayscale(0);
 }
 
 .category-title {
